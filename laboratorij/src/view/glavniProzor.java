@@ -1,0 +1,3636 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package view;
+
+import com.formdev.flatlaf.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import controller.DBaseControll;
+import static controller.DBaseControll.izbrisiDjelatnikaUBazi;
+import static controller.DBaseControll.izmjeniDjelatnikaUBazi;
+import static controller.DBaseControll.spremiDjelatnikaUBazu;
+import static controller.DBaseControll.izmjeniKlijentaUBazi;
+import static controller.DBaseControll.izmjeniParametarUBazi;
+import static controller.DBaseControll.spremiKlijentaUBazu;
+import static controller.DBaseControll.spremiParametarUBazu;
+import static controller.DBaseControll.spremiRezultatUBazu;
+import static controller.DBaseControll.spremiUzorakUBazu;
+import static controller.DBaseControll.spremiVrijednostRezultatUBazu;
+import controller.Konekcija;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.print.PageFormat;
+import java.awt.print.Paper;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
+import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
+import javax.swing.RowFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+import model.Klijent;
+import model.Parametar;
+import model.Rezultat;
+import model.Uzorak;
+import model.autentikacija;
+import model.djelatnik;
+import javax.swing.JLabel;
+import javax.swing.table.DefaultTableCellRenderer;
+import model.Izvjesce;
+
+/**
+ *
+ * @author Zlatko
+ */
+
+ public class glavniProzor extends javax.swing.JFrame { 
+    /**
+     * Creates new form glavniProzor
+     */
+     
+     
+    public glavniProzor() {
+        initComponents();
+        jLayeredPane1.setVisible(true);
+
+        jPanelVoditelj.setVisible(false);
+        panelIzvjestaj.setVisible(false);
+        voditeljBocniPanel.setVisible(false);
+
+        tblDjelatnik.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+        tblDjelatnik.getTableHeader().setBackground(new Color(41, 41, 141));
+        tblDjelatnik.getTableHeader().setForeground(new Color(255, 255, 255));
+
+        tblKlijent.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+        tblKlijent.getTableHeader().setBackground(new Color(41, 41, 141));
+        tblKlijent.getTableHeader().setForeground(new Color(255, 255, 255));
+        tblParametar.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+        tblParametar.getTableHeader().setBackground(new Color(41, 41, 141));
+        tblParametar.getTableHeader().setForeground(new Color(255, 255, 255));
+        tblOdabirParametra.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+        tblOdabirParametra.getTableHeader().setBackground(new Color(41, 41, 141));
+        tblOdabirParametra.getTableHeader().setForeground(new Color(255, 255, 255));
+        tblUnosRez.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+        tblUnosRez.getTableHeader().setBackground(new Color(41, 41, 141));
+        tblUnosRez.getTableHeader().setForeground(new Color(255, 255, 255));
+        tblRezIzvj.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+        tblRezIzvj.getTableHeader().setBackground(new Color(41, 41, 141));
+        tblRezIzvj.getTableHeader().setForeground(new Color(255, 255, 255));
+
+        odabirVremena.setEditor(new JSpinner.DateEditor(odabirVremena, "HH:mm:ss"));
+
+        for (int i = 0; i < tblKlijent.getColumnCount(); i++) {
+            cmbPretrazi.addItem(tblKlijent.getColumnName(i));
+
+        }
+        for (int i = 0; i < tblParametar.getColumnCount(); i++) {
+            cmbPretraziP.addItem(tblParametar.getColumnName(i));
+
+        }
+        jDateChooserDatumUZ.setIcon(new ImageIcon(getClass().getResource("/view/ikone/icons8_calendar_15px.png")));
+
+        jDateChooserPocetakA.setIcon(new ImageIcon(getClass().getResource("/view/ikone/icons8_calendar_15px.png")));
+        jDateChooserZavrsetakA.setIcon(new ImageIcon(getClass().getResource("/view/ikone/icons8_calendar_15px.png")));
+        
+      ImageIcon icon = new ImageIcon((getClass().getResource("/view/ikone/3D-Experiments-icon.png")));//taskbar ikona
+       setIconImage(icon.getImage());
+        
+
+    }
+    int xMouse, yMouse;
+    
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
+
+        flatButtonUI1 = new com.formdev.flatlaf.ui.FlatButtonUI();
+        flatButtonUI2 = new com.formdev.flatlaf.ui.FlatButtonUI();
+        jButton1 = new javax.swing.JButton();
+        panelTopPrijava = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        txtIme = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        txtPass = new javax.swing.JPasswordField();
+        jLabel7 = new javax.swing.JLabel();
+        cmbVrstaKorisnika = new javax.swing.JComboBox<>();
+        btnPrijava = new javax.swing.JButton();
+        jLabel32 = new javax.swing.JLabel();
+        panelDragMouse = new javax.swing.JPanel();
+        lblClose = new javax.swing.JLabel();
+        lblMini = new javax.swing.JLabel();
+        voditeljBocniPanel = new javax.swing.JPanel();
+        lblBtnDjelatnik = new javax.swing.JLabel();
+        btnVoditeljNoviDjelatnik = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
+        btnVoditeljNoviKlijent = new javax.swing.JPanel();
+        jLabel17 = new javax.swing.JLabel();
+        btnNoviParametar = new javax.swing.JPanel();
+        jLabel30 = new javax.swing.JLabel();
+        btnVoditeljNoviUzorak = new javax.swing.JPanel();
+        lblUnosRz = new javax.swing.JLabel();
+        btnVoditeljUnosRez = new javax.swing.JPanel();
+        sepNDjel = new javax.swing.JSeparator();
+        jLabel34 = new javax.swing.JLabel();
+        btnVoditeljIzvjesce = new javax.swing.JPanel();
+        jLayeredPane1 = new javax.swing.JLayeredPane();
+        jPanelVoditelj = new javax.swing.JPanel();
+        panelNoviDjelatnik = new javax.swing.JPanel();
+        jLabel11 = new javax.swing.JLabel();
+        txtNazivDjelatnika = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        txtOIBDjelatnika = new javax.swing.JTextField();
+        jSeparator1 = new javax.swing.JSeparator();
+        btnSpremiDjelatnika = new javax.swing.JButton();
+        jLabel14 = new javax.swing.JLabel();
+        btnObrisiDjelatnika = new javax.swing.JButton();
+        btnIzmjeniDjelatnika = new javax.swing.JButton();
+        jSeparator15 = new javax.swing.JSeparator();
+        jSeparator16 = new javax.swing.JSeparator();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        tblDjelatnik = new javax.swing.JTable();
+        panelParametar = new javax.swing.JPanel();
+        jSeparator3 = new javax.swing.JSeparator();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tblParametar = new javax.swing.JTable();
+        jLabel16 = new javax.swing.JLabel();
+        btnDodajParametar = new javax.swing.JButton();
+        btnSpremiParametar = new javax.swing.JButton();
+        btnIzmjeniParametar = new javax.swing.JButton();
+        jLabel13 = new javax.swing.JLabel();
+        txtPretraziP = new javax.swing.JTextField();
+        cmbPretraziP = new javax.swing.JComboBox<>();
+        jSeparator17 = new javax.swing.JSeparator();
+        jSeparator18 = new javax.swing.JSeparator();
+        panelNoviKlijent = new javax.swing.JPanel();
+        jSeparator2 = new javax.swing.JSeparator();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblKlijent = new javax.swing.JTable();
+        jLabel15 = new javax.swing.JLabel();
+        btnDodajKlijenta = new javax.swing.JButton();
+        btnSpremiKlijenta = new javax.swing.JButton();
+        btnIzmjeniKlijenta = new javax.swing.JButton();
+        jLabel12 = new javax.swing.JLabel();
+        txtPretrazi = new javax.swing.JTextField();
+        cmbPretrazi = new javax.swing.JComboBox<>();
+        jSeparator13 = new javax.swing.JSeparator();
+        jSeparator14 = new javax.swing.JSeparator();
+        panelUzorak = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        jSeparator4 = new javax.swing.JSeparator();
+        jLabel18 = new javax.swing.JLabel();
+        jSeparator5 = new javax.swing.JSeparator();
+        jLabel19 = new javax.swing.JLabel();
+        txtMuzork = new javax.swing.JTextField();
+        jLabel20 = new javax.swing.JLabel();
+        jLabel21 = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
+        jLabel24 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
+        jSeparator6 = new javax.swing.JSeparator();
+        btnSpremiUzorak = new javax.swing.JButton();
+        odabirVremena = new javax.swing.JSpinner();
+        cmbOdabirKlijenta = new javax.swing.JComboBox<>();
+        cmbOdabirDjelatnika = new javax.swing.JComboBox<>();
+        jSeparator7 = new javax.swing.JSeparator();
+        jLabel27 = new javax.swing.JLabel();
+        lblNazivK = new javax.swing.JLabel();
+        lblNazivD = new javax.swing.JLabel();
+        jDateChooserDatumUZ = new com.toedter.calendar.JDateChooser();
+        jDateChooserPocetakA = new com.toedter.calendar.JDateChooser();
+        jDateChooserZavrsetakA = new com.toedter.calendar.JDateChooser();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tblOdabirParametra = new javax.swing.JTable();
+        jSeparator8 = new javax.swing.JSeparator();
+        jLabel28 = new javax.swing.JLabel();
+        txtNazivUz = new javax.swing.JTextField();
+        lblSifraUz = new javax.swing.JLabel();
+        jLabel29 = new javax.swing.JLabel();
+        btnNoviiUzorak = new javax.swing.JButton();
+        panelUnosRezultata = new javax.swing.JPanel();
+        jLabel31 = new javax.swing.JLabel();
+        jSeparator9 = new javax.swing.JSeparator();
+        jSeparator10 = new javax.swing.JSeparator();
+        jLabel39 = new javax.swing.JLabel();
+        jSeparator11 = new javax.swing.JSeparator();
+        btnSpremiRezultat = new javax.swing.JButton();
+        jSeparator12 = new javax.swing.JSeparator();
+        jLabel41 = new javax.swing.JLabel();
+        btnIzmjeniRez = new javax.swing.JButton();
+        cmbOdabirUz = new javax.swing.JComboBox<>();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        tblUnosRez = new javax.swing.JTable();
+        panelIzvjestaj = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
+        jSeparator19 = new javax.swing.JSeparator();
+        jLabel5 = new javax.swing.JLabel();
+        cmbOdabirUzIzvjestaj = new javax.swing.JComboBox<>();
+        jSeparator25 = new javax.swing.JSeparator();
+        jSeparator26 = new javax.swing.JSeparator();
+        jLabel56 = new javax.swing.JLabel();
+        btnIspis = new javax.swing.JButton();
+        panelIspis = new javax.swing.JPanel();
+        jSeparator20 = new javax.swing.JSeparator();
+        jLabel33 = new javax.swing.JLabel();
+        lblSifraD = new javax.swing.JLabel();
+        jLabel36 = new javax.swing.JLabel();
+        lblImeD = new javax.swing.JLabel();
+        jLabel35 = new javax.swing.JLabel();
+        jSeparator21 = new javax.swing.JSeparator();
+        jLabel37 = new javax.swing.JLabel();
+        jSeparator22 = new javax.swing.JSeparator();
+        jSeparator23 = new javax.swing.JSeparator();
+        jLabel38 = new javax.swing.JLabel();
+        jLabel40 = new javax.swing.JLabel();
+        lblNazivKIzvjesce = new javax.swing.JLabel();
+        jLabel43 = new javax.swing.JLabel();
+        lblAdresaK = new javax.swing.JLabel();
+        jLabel45 = new javax.swing.JLabel();
+        lblPBroj = new javax.swing.JLabel();
+        jLabel47 = new javax.swing.JLabel();
+        lblOIB = new javax.swing.JLabel();
+        jLabel49 = new javax.swing.JLabel();
+        lblGrad = new javax.swing.JLabel();
+        jLabel42 = new javax.swing.JLabel();
+        lblSifraK = new javax.swing.JLabel();
+        jSeparator24 = new javax.swing.JSeparator();
+        jLabel44 = new javax.swing.JLabel();
+        jLabel46 = new javax.swing.JLabel();
+        lblLabBr = new javax.swing.JLabel();
+        jLabel50 = new javax.swing.JLabel();
+        lblOznakaU = new javax.swing.JLabel();
+        jLabel48 = new javax.swing.JLabel();
+        jLabel51 = new javax.swing.JLabel();
+        jLabel52 = new javax.swing.JLabel();
+        jLabel53 = new javax.swing.JLabel();
+        lblMjUz = new javax.swing.JLabel();
+        lblDatumUz = new javax.swing.JLabel();
+        lblVrijemeUz = new javax.swing.JLabel();
+        lblPocAna = new javax.swing.JLabel();
+        jLabel54 = new javax.swing.JLabel();
+        lblZavAna = new javax.swing.JLabel();
+        jLabel55 = new javax.swing.JLabel();
+        jSeparator27 = new javax.swing.JSeparator();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblRezIzvj = new javax.swing.JTable();
+        jSeparator28 = new javax.swing.JSeparator();
+        jSeparator29 = new javax.swing.JSeparator();
+        lblBrojUz = new javax.swing.JLabel();
+
+        jButton1.setText("jButton1");
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 255, 255));
+        setLocation(new java.awt.Point(50, 50));
+        setUndecorated(true);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        panelTopPrijava.setBackground(new java.awt.Color(41, 44, 141));
+        panelTopPrijava.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/ikone/3D-Experiments-icon.png"))); // NOI18N
+        jLabel2.setPreferredSize(new java.awt.Dimension(140, 140));
+        panelTopPrijava.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 40, 130, 130));
+
+        jPanel1.setBackground(new java.awt.Color(41, 44, 141));
+        jPanel1.setLayout(new java.awt.GridBagLayout());
+
+        jLabel4.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 102, 102));
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel4.setText("Prijava korisnika");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.weighty = 0.3;
+        jPanel1.add(jLabel4, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.weighty = 0.3;
+        jPanel1.add(jLabel8, gridBagConstraints);
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 102, 102));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/ikone/icons8_customer_20px.png"))); // NOI18N
+        jLabel1.setText("Korisničko ime:");
+        jLabel1.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        jLabel1.setIconTextGap(15);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.weighty = 0.3;
+        jPanel1.add(jLabel1, gridBagConstraints);
+
+        txtIme.setBorder(null);
+        txtIme.setCaretPosition(0);
+        txtIme.setName(""); // NOI18N
+        txtIme.setPreferredSize(new java.awt.Dimension(80, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.weighty = 0.3;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        jPanel1.add(txtIme, gridBagConstraints);
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 102, 102));
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/ikone/icons8_lock_20px.png"))); // NOI18N
+        jLabel3.setText("Lozinka:");
+        jLabel3.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        jLabel3.setIconTextGap(62);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.weighty = 0.3;
+        jPanel1.add(jLabel3, gridBagConstraints);
+
+        txtPass.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        txtPass.setBorder(null);
+        txtPass.setPreferredSize(new java.awt.Dimension(80, 20));
+        txtPass.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPassActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.weighty = 0.3;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        jPanel1.add(txtPass, gridBagConstraints);
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 102, 102));
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/ikone/icons8_user_groups_20px.png"))); // NOI18N
+        jLabel7.setText("Vrsta korisnika:");
+        jLabel7.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        jLabel7.setIconTextGap(12);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.weighty = 0.3;
+        jPanel1.add(jLabel7, gridBagConstraints);
+
+        cmbVrstaKorisnika.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Voditelj", "Djelatnik" }));
+        cmbVrstaKorisnika.setBorder(null);
+        cmbVrstaKorisnika.setPreferredSize(new java.awt.Dimension(80, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.weighty = 0.3;
+        gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+        jPanel1.add(cmbVrstaKorisnika, gridBagConstraints);
+
+        btnPrijava.setBackground(new java.awt.Color(255, 255, 255));
+        btnPrijava.setFont(new java.awt.Font("Segoe UI", 1, 11)); // NOI18N
+        btnPrijava.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/ikone/icons8_user_account_20px.png"))); // NOI18N
+        btnPrijava.setText("Prijava");
+        btnPrijava.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(41, 44, 141)));
+        btnPrijava.setMaximumSize(new java.awt.Dimension(64, 25));
+        btnPrijava.setMinimumSize(new java.awt.Dimension(64, 25));
+        btnPrijava.setPreferredSize(new java.awt.Dimension(100, 30));
+        btnPrijava.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPrijavaActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.weighty = 1.0;
+        jPanel1.add(btnPrijava, gridBagConstraints);
+
+        panelTopPrijava.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 50, 300, 190));
+
+        jLabel32.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        jLabel32.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel32.setText("LabReport");
+        panelTopPrijava.add(jLabel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 90, -1, -1));
+
+        panelDragMouse.setBackground(new java.awt.Color(41, 41, 141));
+        panelDragMouse.setPreferredSize(new java.awt.Dimension(60, 20));
+        panelDragMouse.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                panelDragMouseMouseDragged(evt);
+            }
+        });
+        panelDragMouse.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                panelDragMouseMousePressed(evt);
+            }
+        });
+        panelDragMouse.setLayout(new java.awt.GridBagLayout());
+
+        lblClose.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/ikone/icons8_close_window_20px.png"))); // NOI18N
+        lblClose.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblCloseMouseClicked(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 23, 0, 0);
+        panelDragMouse.add(lblClose, gridBagConstraints);
+
+        lblMini.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/ikone/icons8_minimize_window_20px.png"))); // NOI18N
+        lblMini.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblMiniMouseClicked(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 23);
+        panelDragMouse.add(lblMini, gridBagConstraints);
+
+        panelTopPrijava.add(panelDragMouse, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 1240, 30));
+
+        getContentPane().add(panelTopPrijava, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1260, 260));
+
+        voditeljBocniPanel.setBackground(new java.awt.Color(41, 44, 141));
+        java.awt.GridBagLayout voditeljBocniPanelLayout = new java.awt.GridBagLayout();
+        voditeljBocniPanelLayout.columnWidths = new int[] {0, 0, 0};
+        voditeljBocniPanelLayout.rowHeights = new int[] {0, 3, 0, 3, 0, 3, 0, 3, 0, 3, 0};
+        voditeljBocniPanel.setLayout(voditeljBocniPanelLayout);
+
+        lblBtnDjelatnik.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblBtnDjelatnik.setForeground(new java.awt.Color(255, 255, 255));
+        lblBtnDjelatnik.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblBtnDjelatnik.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/ikone/icons8_add_user_group_woman_man_30px.png"))); // NOI18N
+        lblBtnDjelatnik.setText("Novi djelatnik");
+        lblBtnDjelatnik.setIconTextGap(15);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        voditeljBocniPanel.add(lblBtnDjelatnik, gridBagConstraints);
+
+        btnVoditeljNoviDjelatnik.setBackground(new java.awt.Color(41, 44, 200));
+        btnVoditeljNoviDjelatnik.setForeground(new java.awt.Color(255, 255, 255));
+        btnVoditeljNoviDjelatnik.setMinimumSize(new java.awt.Dimension(164, 30));
+        btnVoditeljNoviDjelatnik.setPreferredSize(new java.awt.Dimension(164, 30));
+        btnVoditeljNoviDjelatnik.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btnVoditeljNoviDjelatnikMousePressed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout btnVoditeljNoviDjelatnikLayout = new javax.swing.GroupLayout(btnVoditeljNoviDjelatnik);
+        btnVoditeljNoviDjelatnik.setLayout(btnVoditeljNoviDjelatnikLayout);
+        btnVoditeljNoviDjelatnikLayout.setHorizontalGroup(
+            btnVoditeljNoviDjelatnikLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 328, Short.MAX_VALUE)
+        );
+        btnVoditeljNoviDjelatnikLayout.setVerticalGroup(
+            btnVoditeljNoviDjelatnikLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 60, Short.MAX_VALUE)
+        );
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 164;
+        gridBagConstraints.ipady = 30;
+        voditeljBocniPanel.add(btnVoditeljNoviDjelatnik, gridBagConstraints);
+
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/ikone/icons8_add_user_male_30px_1.png"))); // NOI18N
+        jLabel9.setText("Novi klijent");
+        jLabel9.setIconTextGap(30);
+        jLabel9.setPreferredSize(new java.awt.Dimension(164, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        voditeljBocniPanel.add(jLabel9, gridBagConstraints);
+        jLabel9.getAccessibleContext().setAccessibleDescription("");
+
+        btnVoditeljNoviKlijent.setBackground(new java.awt.Color(41, 44, 200));
+        btnVoditeljNoviKlijent.setMinimumSize(new java.awt.Dimension(164, 30));
+        btnVoditeljNoviKlijent.setPreferredSize(new java.awt.Dimension(164, 30));
+        btnVoditeljNoviKlijent.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btnVoditeljNoviKlijentMousePressed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout btnVoditeljNoviKlijentLayout = new javax.swing.GroupLayout(btnVoditeljNoviKlijent);
+        btnVoditeljNoviKlijent.setLayout(btnVoditeljNoviKlijentLayout);
+        btnVoditeljNoviKlijentLayout.setHorizontalGroup(
+            btnVoditeljNoviKlijentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 328, Short.MAX_VALUE)
+        );
+        btnVoditeljNoviKlijentLayout.setVerticalGroup(
+            btnVoditeljNoviKlijentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 60, Short.MAX_VALUE)
+        );
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 164;
+        gridBagConstraints.ipady = 30;
+        voditeljBocniPanel.add(btnVoditeljNoviKlijent, gridBagConstraints);
+
+        jLabel17.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel17.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/ikone/icons8_adjust_30px.png"))); // NOI18N
+        jLabel17.setText("Novi parametar");
+        jLabel17.setIconTextGap(15);
+        jLabel17.setPreferredSize(new java.awt.Dimension(164, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        voditeljBocniPanel.add(jLabel17, gridBagConstraints);
+
+        btnNoviParametar.setBackground(new java.awt.Color(41, 44, 200));
+        btnNoviParametar.setMinimumSize(new java.awt.Dimension(164, 30));
+        btnNoviParametar.setPreferredSize(new java.awt.Dimension(164, 30));
+        btnNoviParametar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btnNoviParametarMousePressed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout btnNoviParametarLayout = new javax.swing.GroupLayout(btnNoviParametar);
+        btnNoviParametar.setLayout(btnNoviParametarLayout);
+        btnNoviParametarLayout.setHorizontalGroup(
+            btnNoviParametarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 328, Short.MAX_VALUE)
+        );
+        btnNoviParametarLayout.setVerticalGroup(
+            btnNoviParametarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 60, Short.MAX_VALUE)
+        );
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 164;
+        gridBagConstraints.ipady = 30;
+        voditeljBocniPanel.add(btnNoviParametar, gridBagConstraints);
+
+        jLabel30.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel30.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel30.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel30.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/ikone/icons8_lab_items_30px.png"))); // NOI18N
+        jLabel30.setText("Novi uzorak");
+        jLabel30.setIconTextGap(30);
+        jLabel30.setPreferredSize(new java.awt.Dimension(164, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        voditeljBocniPanel.add(jLabel30, gridBagConstraints);
+
+        btnVoditeljNoviUzorak.setBackground(new java.awt.Color(41, 44, 200));
+        btnVoditeljNoviUzorak.setMinimumSize(new java.awt.Dimension(164, 30));
+        btnVoditeljNoviUzorak.setPreferredSize(new java.awt.Dimension(164, 30));
+        btnVoditeljNoviUzorak.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btnVoditeljNoviUzorakMousePressed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout btnVoditeljNoviUzorakLayout = new javax.swing.GroupLayout(btnVoditeljNoviUzorak);
+        btnVoditeljNoviUzorak.setLayout(btnVoditeljNoviUzorakLayout);
+        btnVoditeljNoviUzorakLayout.setHorizontalGroup(
+            btnVoditeljNoviUzorakLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 328, Short.MAX_VALUE)
+        );
+        btnVoditeljNoviUzorakLayout.setVerticalGroup(
+            btnVoditeljNoviUzorakLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 60, Short.MAX_VALUE)
+        );
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 164;
+        gridBagConstraints.ipady = 30;
+        voditeljBocniPanel.add(btnVoditeljNoviUzorak, gridBagConstraints);
+
+        lblUnosRz.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lblUnosRz.setForeground(new java.awt.Color(255, 255, 255));
+        lblUnosRz.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblUnosRz.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/ikone/icons8_report_card_30px.png"))); // NOI18N
+        lblUnosRz.setText("Unos rezultata");
+        lblUnosRz.setIconTextGap(15);
+        lblUnosRz.setMaximumSize(new java.awt.Dimension(148, 30));
+        lblUnosRz.setMinimumSize(new java.awt.Dimension(148, 30));
+        lblUnosRz.setPreferredSize(new java.awt.Dimension(164, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        voditeljBocniPanel.add(lblUnosRz, gridBagConstraints);
+
+        btnVoditeljUnosRez.setBackground(new java.awt.Color(41, 44, 200));
+        btnVoditeljUnosRez.setMinimumSize(new java.awt.Dimension(164, 30));
+        btnVoditeljUnosRez.setPreferredSize(new java.awt.Dimension(164, 30));
+        btnVoditeljUnosRez.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                btnVoditeljUnosRezFocusLost(evt);
+            }
+        });
+        btnVoditeljUnosRez.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                btnVoditeljUnosRezMousePressed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout btnVoditeljUnosRezLayout = new javax.swing.GroupLayout(btnVoditeljUnosRez);
+        btnVoditeljUnosRez.setLayout(btnVoditeljUnosRezLayout);
+        btnVoditeljUnosRezLayout.setHorizontalGroup(
+            btnVoditeljUnosRezLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 328, Short.MAX_VALUE)
+        );
+        btnVoditeljUnosRezLayout.setVerticalGroup(
+            btnVoditeljUnosRezLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 60, Short.MAX_VALUE)
+        );
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 164;
+        gridBagConstraints.ipady = 30;
+        voditeljBocniPanel.add(btnVoditeljUnosRez, gridBagConstraints);
+
+        sepNDjel.setBackground(new java.awt.Color(41, 44, 200));
+        sepNDjel.setPreferredSize(new java.awt.Dimension(0, 5));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTH;
+        voditeljBocniPanel.add(sepNDjel, gridBagConstraints);
+
+        jLabel34.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel34.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel34.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel34.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/ikone/icons8_agreement_30px.png"))); // NOI18N
+        jLabel34.setText("Izvješće");
+        jLabel34.setIconTextGap(30);
+        jLabel34.setMaximumSize(new java.awt.Dimension(148, 30));
+        jLabel34.setMinimumSize(new java.awt.Dimension(148, 30));
+        jLabel34.setPreferredSize(new java.awt.Dimension(164, 30));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+        voditeljBocniPanel.add(jLabel34, gridBagConstraints);
+
+        btnVoditeljIzvjesce.setBackground(new java.awt.Color(41, 44, 200));
+        btnVoditeljIzvjesce.setMinimumSize(new java.awt.Dimension(164, 30));
+        btnVoditeljIzvjesce.setPreferredSize(new java.awt.Dimension(164, 30));
+        btnVoditeljIzvjesce.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnVoditeljIzvjesceMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout btnVoditeljIzvjesceLayout = new javax.swing.GroupLayout(btnVoditeljIzvjesce);
+        btnVoditeljIzvjesce.setLayout(btnVoditeljIzvjesceLayout);
+        btnVoditeljIzvjesceLayout.setHorizontalGroup(
+            btnVoditeljIzvjesceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        btnVoditeljIzvjesceLayout.setVerticalGroup(
+            btnVoditeljIzvjesceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipadx = 164;
+        gridBagConstraints.ipady = 30;
+        voditeljBocniPanel.add(btnVoditeljIzvjesce, gridBagConstraints);
+
+        getContentPane().add(voditeljBocniPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 260, 240, 690));
+
+        jLayeredPane1.setBackground(new java.awt.Color(255, 255, 255));
+        jLayeredPane1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanelVoditelj.setBackground(new java.awt.Color(255, 255, 255));
+        jPanelVoditelj.setMinimumSize(new java.awt.Dimension(1000, 590));
+        jPanelVoditelj.setPreferredSize(new java.awt.Dimension(1000, 590));
+        jPanelVoditelj.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        panelNoviDjelatnik.setBackground(new java.awt.Color(255, 255, 255));
+        panelNoviDjelatnik.setLayout(new java.awt.GridBagLayout());
+
+        jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel11.setText("Ime i prezime djelatnika:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.weightx = 0.2;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
+        panelNoviDjelatnik.add(jLabel11, gridBagConstraints);
+
+        txtNazivDjelatnika.setPreferredSize(new java.awt.Dimension(120, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.weightx = 0.2;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+        panelNoviDjelatnik.add(txtNazivDjelatnika, gridBagConstraints);
+
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel10.setText("OIB:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.weightx = 0.2;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
+        panelNoviDjelatnik.add(jLabel10, gridBagConstraints);
+
+        txtOIBDjelatnika.setPreferredSize(new java.awt.Dimension(120, 20));
+        txtOIBDjelatnika.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtOIBDjelatnikaKeyTyped(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.weightx = 0.2;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+        panelNoviDjelatnik.add(txtOIBDjelatnika, gridBagConstraints);
+
+        jSeparator1.setForeground(new java.awt.Color(41, 41, 141));
+        jSeparator1.setPreferredSize(new java.awt.Dimension(0, 4));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        panelNoviDjelatnik.add(jSeparator1, gridBagConstraints);
+
+        btnSpremiDjelatnika.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnSpremiDjelatnika.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/ikone/icons8_save_20px.png"))); // NOI18N
+        btnSpremiDjelatnika.setText("Spremi ");
+        btnSpremiDjelatnika.setIconTextGap(10);
+        btnSpremiDjelatnika.setPreferredSize(new java.awt.Dimension(130, 30));
+        btnSpremiDjelatnika.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSpremiDjelatnikaActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 4.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        panelNoviDjelatnik.add(btnSpremiDjelatnika, gridBagConstraints);
+
+        jLabel14.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel14.setText("Podaci o djelatnicima");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(20, 15, 0, 0);
+        panelNoviDjelatnik.add(jLabel14, gridBagConstraints);
+
+        btnObrisiDjelatnika.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnObrisiDjelatnika.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/ikone/icons8_denied_20px.png"))); // NOI18N
+        btnObrisiDjelatnika.setText("Obriši ");
+        btnObrisiDjelatnika.setActionCommand("");
+        btnObrisiDjelatnika.setIconTextGap(10);
+        btnObrisiDjelatnika.setPreferredSize(new java.awt.Dimension(130, 30));
+        btnObrisiDjelatnika.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnObrisiDjelatnikaActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 160, 20, 10);
+        panelNoviDjelatnik.add(btnObrisiDjelatnika, gridBagConstraints);
+
+        btnIzmjeniDjelatnika.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnIzmjeniDjelatnika.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/ikone/icons8_available_updates_20px.png"))); // NOI18N
+        btnIzmjeniDjelatnika.setText("Izmjeni ");
+        btnIzmjeniDjelatnika.setActionCommand("");
+        btnIzmjeniDjelatnika.setIconTextGap(10);
+        btnIzmjeniDjelatnika.setPreferredSize(new java.awt.Dimension(130, 30));
+        btnIzmjeniDjelatnika.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIzmjeniDjelatnikaActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 20, 160);
+        panelNoviDjelatnik.add(btnIzmjeniDjelatnika, gridBagConstraints);
+
+        jSeparator15.setForeground(new java.awt.Color(41, 41, 141));
+        jSeparator15.setPreferredSize(new java.awt.Dimension(0, 4));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        panelNoviDjelatnik.add(jSeparator15, gridBagConstraints);
+
+        jSeparator16.setForeground(new java.awt.Color(41, 41, 141));
+        jSeparator16.setPreferredSize(new java.awt.Dimension(0, 4));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        panelNoviDjelatnik.add(jSeparator16, gridBagConstraints);
+
+        tblDjelatnik.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        tblDjelatnik.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Sifra djelatnika", "Ime i prezime djelatnika", "OIB"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Long.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, true, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblDjelatnik.setGridColor(new java.awt.Color(41, 41, 141));
+        tblDjelatnik.setPreferredSize(new java.awt.Dimension(300, 0));
+        tblDjelatnik.setSelectionBackground(new java.awt.Color(0, 191, 255));
+        jScrollPane5.setViewportView(tblDjelatnik);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(15, 15, 15, 15);
+        panelNoviDjelatnik.add(jScrollPane5, gridBagConstraints);
+
+        jPanelVoditelj.add(panelNoviDjelatnik, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 0, 1020, 690));
+
+        panelParametar.setBackground(new java.awt.Color(255, 255, 255));
+        panelParametar.setLayout(new java.awt.GridBagLayout());
+
+        jSeparator3.setForeground(new java.awt.Color(41, 41, 141));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        panelParametar.add(jSeparator3, gridBagConstraints);
+
+        tblParametar.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        tblParametar.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Sifra parametra", "Naziv parametra", "Mjerna jedinica", "MDK"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, true, true, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblParametar.setFocusable(false);
+        tblParametar.setGridColor(new java.awt.Color(41, 41, 141));
+        tblParametar.setIntercellSpacing(new java.awt.Dimension(0, 0));
+        tblParametar.setOpaque(false);
+        tblParametar.setSelectionBackground(new java.awt.Color(0, 191, 255));
+        tblParametar.setShowVerticalLines(false);
+        tblParametar.getTableHeader().setReorderingAllowed(false);
+        jScrollPane3.setViewportView(tblParametar);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(15, 15, 15, 15);
+        panelParametar.add(jScrollPane3, gridBagConstraints);
+
+        jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel16.setText("Podaci o parametrima");
+        jLabel16.setToolTipText("");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(15, 25, 10, 0);
+        panelParametar.add(jLabel16, gridBagConstraints);
+
+        btnDodajParametar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnDodajParametar.setText("Dodaj parametar");
+        btnDodajParametar.setToolTipText("\nPritisnite da biste dodali novog djelatnika u tablici, dvostrukim klikom na polje se otvara mogućnost upisa u tablicu, nakon završetka pritisnite gumb Spremi klijenta");
+        btnDodajParametar.setActionCommand("");
+        btnDodajParametar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnDodajParametar.setPreferredSize(new java.awt.Dimension(140, 30));
+        btnDodajParametar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDodajParametarActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 25, 325);
+        panelParametar.add(btnDodajParametar, gridBagConstraints);
+
+        btnSpremiParametar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnSpremiParametar.setText("Spremi parametar");
+        btnSpremiParametar.setActionCommand("");
+        btnSpremiParametar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnSpremiParametar.setPreferredSize(new java.awt.Dimension(140, 30));
+        btnSpremiParametar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSpremiParametarActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 325, 25, 10);
+        panelParametar.add(btnSpremiParametar, gridBagConstraints);
+
+        btnIzmjeniParametar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnIzmjeniParametar.setText("Izmjeni parametar");
+        btnIzmjeniParametar.setActionCommand("");
+        btnIzmjeniParametar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnIzmjeniParametar.setPreferredSize(new java.awt.Dimension(140, 30));
+        btnIzmjeniParametar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIzmjeniParametarActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 25, 10);
+        panelParametar.add(btnIzmjeniParametar, gridBagConstraints);
+
+        jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel13.setText("Pretraživanje:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.weightx = 0.8;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 10);
+        panelParametar.add(jLabel13, gridBagConstraints);
+
+        txtPretraziP.setMinimumSize(new java.awt.Dimension(28, 20));
+        txtPretraziP.setPreferredSize(new java.awt.Dimension(120, 20));
+        txtPretraziP.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtPretraziPKeyReleased(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.weightx = 0.6;
+        gridBagConstraints.weighty = 0.1;
+        panelParametar.add(txtPretraziP, gridBagConstraints);
+
+        cmbPretraziP.setPreferredSize(new java.awt.Dimension(120, 20));
+        cmbPretraziP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbPretraziPActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 3.7;
+        gridBagConstraints.weighty = 0.1;
+        panelParametar.add(cmbPretraziP, gridBagConstraints);
+
+        jSeparator17.setForeground(new java.awt.Color(41, 41, 141));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        panelParametar.add(jSeparator17, gridBagConstraints);
+
+        jSeparator18.setForeground(new java.awt.Color(41, 41, 141));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        panelParametar.add(jSeparator18, gridBagConstraints);
+
+        jPanelVoditelj.add(panelParametar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 0, 1020, 690));
+        panelParametar.getAccessibleContext().setAccessibleName("");
+
+        panelNoviKlijent.setBackground(new java.awt.Color(255, 255, 255));
+        panelNoviKlijent.setLayout(new java.awt.GridBagLayout());
+
+        jSeparator2.setForeground(new java.awt.Color(41, 41, 141));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        panelNoviKlijent.add(jSeparator2, gridBagConstraints);
+
+        tblKlijent.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        tblKlijent.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Sifra klijenta", "Naziv klijenta", "Adresa", "Poštanski broj", "Grad", "OIB"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Long.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, true, true, true, true, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblKlijent.setFocusable(false);
+        tblKlijent.setGridColor(new java.awt.Color(41, 41, 141));
+        tblKlijent.setIntercellSpacing(new java.awt.Dimension(0, 0));
+        tblKlijent.setOpaque(false);
+        tblKlijent.setSelectionBackground(new java.awt.Color(0, 191, 255));
+        tblKlijent.setShowVerticalLines(false);
+        tblKlijent.getTableHeader().setReorderingAllowed(false);
+        jScrollPane2.setViewportView(tblKlijent);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.ipadx = 450;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        panelNoviKlijent.add(jScrollPane2, gridBagConstraints);
+
+        jLabel15.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel15.setText("Podaci o klijentima");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 0);
+        panelNoviKlijent.add(jLabel15, gridBagConstraints);
+
+        btnDodajKlijenta.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnDodajKlijenta.setText("Dodaj klijenta");
+        btnDodajKlijenta.setToolTipText("\nPritisnite da biste dodali novog djelatnika u tablici, dvostrukim klikom na polje se otvara mogućnost upisa u tablicu, nakon završetka pritisnite gumb Spremi klijenta");
+        btnDodajKlijenta.setActionCommand("");
+        btnDodajKlijenta.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnDodajKlijenta.setPreferredSize(new java.awt.Dimension(130, 30));
+        btnDodajKlijenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDodajKlijentaActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 20, 350);
+        panelNoviKlijent.add(btnDodajKlijenta, gridBagConstraints);
+
+        btnSpremiKlijenta.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnSpremiKlijenta.setText("Spremi klijenta");
+        btnSpremiKlijenta.setActionCommand("");
+        btnSpremiKlijenta.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnSpremiKlijenta.setPreferredSize(new java.awt.Dimension(130, 30));
+        btnSpremiKlijenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSpremiKlijentaActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 350, 20, 5);
+        panelNoviKlijent.add(btnSpremiKlijenta, gridBagConstraints);
+
+        btnIzmjeniKlijenta.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnIzmjeniKlijenta.setText("Izmjeni klijenta");
+        btnIzmjeniKlijenta.setActionCommand("");
+        btnIzmjeniKlijenta.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnIzmjeniKlijenta.setPreferredSize(new java.awt.Dimension(130, 30));
+        btnIzmjeniKlijenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIzmjeniKlijentaActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 20, 5);
+        panelNoviKlijent.add(btnIzmjeniKlijenta, gridBagConstraints);
+
+        jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel12.setText("Pretraživanje:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 100, 0, 10);
+        panelNoviKlijent.add(jLabel12, gridBagConstraints);
+
+        txtPretrazi.setPreferredSize(new java.awt.Dimension(120, 20));
+        txtPretrazi.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtPretraziKeyReleased(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 220, 0, 0);
+        panelNoviKlijent.add(txtPretrazi, gridBagConstraints);
+
+        cmbPretrazi.setPreferredSize(new java.awt.Dimension(120, 20));
+        cmbPretrazi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbPretraziActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 420, 0, 0);
+        panelNoviKlijent.add(cmbPretrazi, gridBagConstraints);
+
+        jSeparator13.setForeground(new java.awt.Color(41, 41, 141));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        panelNoviKlijent.add(jSeparator13, gridBagConstraints);
+
+        jSeparator14.setForeground(new java.awt.Color(41, 41, 141));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        panelNoviKlijent.add(jSeparator14, gridBagConstraints);
+
+        jPanelVoditelj.add(panelNoviKlijent, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 0, 1010, 690));
+
+        panelUzorak.setBackground(new java.awt.Color(255, 255, 255));
+        panelUzorak.setLayout(new java.awt.GridBagLayout());
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel6.setText("Uzorak");
+        jLabel6.setToolTipText("");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.2;
+        gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 20);
+        panelUzorak.add(jLabel6, gridBagConstraints);
+
+        jSeparator4.setForeground(new java.awt.Color(41, 41, 141));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        panelUzorak.add(jSeparator4, gridBagConstraints);
+
+        jLabel18.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel18.setText("Odabir klijenta (po šifri):");
+        jLabel18.setToolTipText("");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+        panelUzorak.add(jLabel18, gridBagConstraints);
+
+        jSeparator5.setForeground(new java.awt.Color(41, 41, 141));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.05;
+        panelUzorak.add(jSeparator5, gridBagConstraints);
+
+        jLabel19.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel19.setText("Datum uzorkovanja:");
+        jLabel19.setToolTipText("");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+        panelUzorak.add(jLabel19, gridBagConstraints);
+
+        txtMuzork.setMinimumSize(new java.awt.Dimension(60, 20));
+        txtMuzork.setPreferredSize(new java.awt.Dimension(120, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        panelUzorak.add(txtMuzork, gridBagConstraints);
+
+        jLabel20.setFont(jLabel19.getFont());
+        jLabel20.setToolTipText("");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+        panelUzorak.add(jLabel20, gridBagConstraints);
+
+        jLabel21.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel21.setText("Naziv uzorka:");
+        jLabel21.setToolTipText("");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+        panelUzorak.add(jLabel21, gridBagConstraints);
+
+        jLabel22.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel22.setText("Vrijeme uzorkovanja:");
+        jLabel22.setToolTipText("");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+        panelUzorak.add(jLabel22, gridBagConstraints);
+
+        jLabel23.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel23.setText("Početak analize:");
+        jLabel23.setToolTipText("");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+        panelUzorak.add(jLabel23, gridBagConstraints);
+
+        jLabel24.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel24.setText("Završetak analize:");
+        jLabel24.setToolTipText("");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+        panelUzorak.add(jLabel24, gridBagConstraints);
+
+        jLabel25.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel25.setText("Podaci o uzorku");
+        jLabel25.setToolTipText("");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 20);
+        panelUzorak.add(jLabel25, gridBagConstraints);
+
+        jLabel26.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel26.setText("Odabir djelatnika (po šifri):");
+        jLabel26.setToolTipText("");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+        panelUzorak.add(jLabel26, gridBagConstraints);
+
+        jSeparator6.setForeground(new java.awt.Color(41, 41, 141));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.05;
+        panelUzorak.add(jSeparator6, gridBagConstraints);
+
+        btnSpremiUzorak.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnSpremiUzorak.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/ikone/icons8_save_20px.png"))); // NOI18N
+        btnSpremiUzorak.setText("Spremi");
+        btnSpremiUzorak.setPreferredSize(new java.awt.Dimension(130, 30));
+        btnSpremiUzorak.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSpremiUzorakActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 17;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 150, 5, 0);
+        panelUzorak.add(btnSpremiUzorak, gridBagConstraints);
+
+        odabirVremena.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        odabirVremena.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, null, java.util.Calendar.MINUTE));
+        odabirVremena.setPreferredSize(new java.awt.Dimension(120, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        panelUzorak.add(odabirVremena, gridBagConstraints);
+
+        cmbOdabirKlijenta.setPreferredSize(new java.awt.Dimension(120, 20));
+        cmbOdabirKlijenta.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cmbOdabirKlijentaItemStateChanged(evt);
+            }
+        });
+        cmbOdabirKlijenta.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                cmbOdabirKlijentaMousePressed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        panelUzorak.add(cmbOdabirKlijenta, gridBagConstraints);
+
+        cmbOdabirDjelatnika.setPreferredSize(new java.awt.Dimension(120, 20));
+        cmbOdabirDjelatnika.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cmbOdabirDjelatnikaItemStateChanged(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        panelUzorak.add(cmbOdabirDjelatnika, gridBagConstraints);
+
+        jSeparator7.setForeground(new java.awt.Color(41, 41, 141));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 16;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        panelUzorak.add(jSeparator7, gridBagConstraints);
+
+        jLabel27.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel27.setText("Ostali podaci");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 20);
+        panelUzorak.add(jLabel27, gridBagConstraints);
+
+        lblNazivK.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        lblNazivK.setText("Naziv klijenta");
+        lblNazivK.setEnabled(false);
+        lblNazivK.setPreferredSize(new java.awt.Dimension(150, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        panelUzorak.add(lblNazivK, gridBagConstraints);
+
+        lblNazivD.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        lblNazivD.setText("Naziv djelatnika");
+        lblNazivD.setEnabled(false);
+        lblNazivD.setPreferredSize(new java.awt.Dimension(150, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        panelUzorak.add(lblNazivD, gridBagConstraints);
+
+        jDateChooserDatumUZ.setDateFormatString("yyyy-MM-dd");
+        jDateChooserDatumUZ.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        jDateChooserDatumUZ.setPreferredSize(new java.awt.Dimension(120, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        panelUzorak.add(jDateChooserDatumUZ, gridBagConstraints);
+
+        jDateChooserPocetakA.setDateFormatString("yyyy-MM-dd");
+        jDateChooserPocetakA.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        jDateChooserPocetakA.setPreferredSize(new java.awt.Dimension(120, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        panelUzorak.add(jDateChooserPocetakA, gridBagConstraints);
+
+        jDateChooserZavrsetakA.setDateFormatString("yyyy-MM-dd");
+        jDateChooserZavrsetakA.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        jDateChooserZavrsetakA.setPreferredSize(new java.awt.Dimension(120, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        panelUzorak.add(jDateChooserZavrsetakA, gridBagConstraints);
+
+        tblOdabirParametra.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        tblOdabirParametra.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Sifra parametra", "Naziv parametra", "Odabrani parametar"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.Boolean.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblOdabirParametra.setGridColor(new java.awt.Color(41, 41, 141));
+        tblOdabirParametra.setSelectionBackground(new java.awt.Color(0, 191, 255));
+        jScrollPane4.setViewportView(tblOdabirParametra);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridheight = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        panelUzorak.add(jScrollPane4, gridBagConstraints);
+
+        jSeparator8.setForeground(new java.awt.Color(41, 41, 141));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        panelUzorak.add(jSeparator8, gridBagConstraints);
+
+        jLabel28.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel28.setText("Mjesto uzorkovanja:");
+        jLabel28.setToolTipText("");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+        panelUzorak.add(jLabel28, gridBagConstraints);
+
+        txtNazivUz.setMinimumSize(new java.awt.Dimension(60, 20));
+        txtNazivUz.setPreferredSize(new java.awt.Dimension(120, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        panelUzorak.add(txtNazivUz, gridBagConstraints);
+
+        lblSifraUz.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblSifraUz.setText("Sifra uzorka");
+        lblSifraUz.setToolTipText("");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        panelUzorak.add(lblSifraUz, gridBagConstraints);
+
+        jLabel29.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel29.setText("Sifra novog uzorka:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 10);
+        panelUzorak.add(jLabel29, gridBagConstraints);
+
+        btnNoviiUzorak.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnNoviiUzorak.setText("Novi uzorak");
+        btnNoviiUzorak.setPreferredSize(new java.awt.Dimension(130, 30));
+        btnNoviiUzorak.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNoviiUzorakActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 17;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 150);
+        panelUzorak.add(btnNoviiUzorak, gridBagConstraints);
+
+        jPanelVoditelj.add(panelUzorak, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 0, 1010, 690));
+
+        panelUnosRezultata.setBackground(new java.awt.Color(255, 255, 255));
+        panelUnosRezultata.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentHidden(java.awt.event.ComponentEvent evt) {
+                panelUnosRezultataComponentHidden(evt);
+            }
+        });
+        panelUnosRezultata.setLayout(new java.awt.GridBagLayout());
+
+        jLabel31.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel31.setText("Unos rezultata");
+        jLabel31.setToolTipText("");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.2;
+        gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 20);
+        panelUnosRezultata.add(jLabel31, gridBagConstraints);
+
+        jSeparator9.setForeground(new java.awt.Color(41, 41, 141));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        panelUnosRezultata.add(jSeparator9, gridBagConstraints);
+
+        jSeparator10.setForeground(new java.awt.Color(41, 41, 141));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.05;
+        panelUnosRezultata.add(jSeparator10, gridBagConstraints);
+
+        jLabel39.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel39.setText("Odabir uzorka");
+        jLabel39.setToolTipText("");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 20);
+        panelUnosRezultata.add(jLabel39, gridBagConstraints);
+
+        jSeparator11.setForeground(new java.awt.Color(41, 41, 141));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.05;
+        panelUnosRezultata.add(jSeparator11, gridBagConstraints);
+
+        btnSpremiRezultat.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnSpremiRezultat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/ikone/icons8_save_20px.png"))); // NOI18N
+        btnSpremiRezultat.setText("Spremi");
+        btnSpremiRezultat.setIconTextGap(10);
+        btnSpremiRezultat.setPreferredSize(new java.awt.Dimension(150, 30));
+        btnSpremiRezultat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSpremiRezultatActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 180, 5, 0);
+        panelUnosRezultata.add(btnSpremiRezultat, gridBagConstraints);
+
+        jSeparator12.setForeground(new java.awt.Color(41, 41, 141));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        panelUnosRezultata.add(jSeparator12, gridBagConstraints);
+
+        jLabel41.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel41.setText("Unos rezultata za odabrani uzorak");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 20, 0, 20);
+        panelUnosRezultata.add(jLabel41, gridBagConstraints);
+
+        btnIzmjeniRez.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnIzmjeniRez.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/ikone/icons8_create_20px.png"))); // NOI18N
+        btnIzmjeniRez.setText("Izmjeni rezultat");
+        btnIzmjeniRez.setPreferredSize(new java.awt.Dimension(150, 30));
+        btnIzmjeniRez.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIzmjeniRezActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 0, 5, 180);
+        panelUnosRezultata.add(btnIzmjeniRez, gridBagConstraints);
+
+        cmbOdabirUz.setPreferredSize(new java.awt.Dimension(120, 20));
+        cmbOdabirUz.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cmbOdabirUzItemStateChanged(evt);
+            }
+        });
+        cmbOdabirUz.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentHidden(java.awt.event.ComponentEvent evt) {
+                cmbOdabirUzComponentHidden(evt);
+            }
+        });
+        cmbOdabirUz.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbOdabirUzActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 150, 0, 0);
+        panelUnosRezultata.add(cmbOdabirUz, gridBagConstraints);
+
+        tblUnosRez.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        tblUnosRez.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Sifra parametra", "Naziv parametra", "Mjerna jedinica", "MDK", "Vrijednost"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblUnosRez.setGridColor(new java.awt.Color(41, 41, 141));
+        tblUnosRez.setSelectionBackground(new java.awt.Color(0, 191, 255));
+        tblUnosRez.getTableHeader().setResizingAllowed(false);
+        tblUnosRez.getTableHeader().setReorderingAllowed(false);
+        jScrollPane6.setViewportView(tblUnosRez);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.ipadx = 350;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        panelUnosRezultata.add(jScrollPane6, gridBagConstraints);
+
+        jPanelVoditelj.add(panelUnosRezultata, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 0, 1010, 690));
+
+        panelIzvjestaj.setBackground(new java.awt.Color(255, 255, 255));
+        panelIzvjestaj.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setLayout(new java.awt.GridBagLayout());
+
+        jSeparator19.setForeground(new java.awt.Color(41, 41, 141));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weighty = 0.1;
+        jPanel2.add(jSeparator19, gridBagConstraints);
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        jLabel5.setText("Odabir uzorka:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.weighty = 0.1;
+        jPanel2.add(jLabel5, gridBagConstraints);
+
+        cmbOdabirUzIzvjestaj.setPreferredSize(new java.awt.Dimension(120, 20));
+        cmbOdabirUzIzvjestaj.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbOdabirUzIzvjestajActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 0);
+        jPanel2.add(cmbOdabirUzIzvjestaj, gridBagConstraints);
+
+        jSeparator25.setForeground(new java.awt.Color(41, 41, 141));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weighty = 0.1;
+        jPanel2.add(jSeparator25, gridBagConstraints);
+
+        jSeparator26.setForeground(new java.awt.Color(41, 41, 141));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weighty = 0.1;
+        jPanel2.add(jSeparator26, gridBagConstraints);
+
+        jLabel56.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel56.setText("Izrada izvještaja");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weighty = 0.1;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        jPanel2.add(jLabel56, gridBagConstraints);
+
+        btnIspis.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnIspis.setIcon(new javax.swing.ImageIcon(getClass().getResource("/view/ikone/icons8_print_20px.png"))); // NOI18N
+        btnIspis.setText("Ispis");
+        btnIspis.setIconTextGap(10);
+        btnIspis.setPreferredSize(new java.awt.Dimension(130, 30));
+        btnIspis.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIspisActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.weighty = 0.8;
+        jPanel2.add(btnIspis, gridBagConstraints);
+
+        panelIzvjestaj.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 210, 410, 170));
+
+        panelIspis.setBackground(new java.awt.Color(255, 255, 255));
+        panelIspis.setLayout(new java.awt.GridBagLayout());
+
+        jSeparator20.setForeground(new java.awt.Color(41, 41, 141));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.05;
+        panelIspis.add(jSeparator20, gridBagConstraints);
+
+        jLabel33.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        jLabel33.setText("Sifra djelatnika:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        panelIspis.add(jLabel33, gridBagConstraints);
+
+        lblSifraD.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.8;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 0);
+        panelIspis.add(lblSifraD, gridBagConstraints);
+
+        jLabel36.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        jLabel36.setText("Ime djelatnika:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        panelIspis.add(jLabel36, gridBagConstraints);
+
+        lblImeD.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 6;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.8;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 0);
+        panelIspis.add(lblImeD, gridBagConstraints);
+
+        jLabel35.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel35.setText("Podaci o djelatniku");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        panelIspis.add(jLabel35, gridBagConstraints);
+
+        jSeparator21.setForeground(new java.awt.Color(41, 41, 141));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.05;
+        panelIspis.add(jSeparator21, gridBagConstraints);
+
+        jLabel37.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel37.setText("Podaci o klijentu");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        panelIspis.add(jLabel37, gridBagConstraints);
+
+        jSeparator22.setForeground(new java.awt.Color(41, 41, 141));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.05;
+        panelIspis.add(jSeparator22, gridBagConstraints);
+
+        jSeparator23.setForeground(new java.awt.Color(41, 41, 141));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.05;
+        panelIspis.add(jSeparator23, gridBagConstraints);
+
+        jLabel38.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel38.setText("Izvješće za uzorak:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        panelIspis.add(jLabel38, gridBagConstraints);
+
+        jLabel40.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        jLabel40.setText("Naziv klijenta:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        panelIspis.add(jLabel40, gridBagConstraints);
+
+        lblNazivKIzvjesce.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.8;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 0);
+        panelIspis.add(lblNazivKIzvjesce, gridBagConstraints);
+
+        jLabel43.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        jLabel43.setText("Adresa:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        panelIspis.add(jLabel43, gridBagConstraints);
+
+        lblAdresaK.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.8;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 0);
+        panelIspis.add(lblAdresaK, gridBagConstraints);
+
+        jLabel45.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        jLabel45.setText("Poštanski broj:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        panelIspis.add(jLabel45, gridBagConstraints);
+
+        lblPBroj.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.8;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 0);
+        panelIspis.add(lblPBroj, gridBagConstraints);
+
+        jLabel47.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        jLabel47.setText("OIB:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        panelIspis.add(jLabel47, gridBagConstraints);
+
+        lblOIB.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.8;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 0);
+        panelIspis.add(lblOIB, gridBagConstraints);
+
+        jLabel49.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        jLabel49.setText("Grad:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        panelIspis.add(jLabel49, gridBagConstraints);
+
+        lblGrad.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.8;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 0);
+        panelIspis.add(lblGrad, gridBagConstraints);
+
+        jLabel42.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        jLabel42.setText("Sifra klijenta:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        panelIspis.add(jLabel42, gridBagConstraints);
+
+        lblSifraK.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.8;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 0);
+        panelIspis.add(lblSifraK, gridBagConstraints);
+
+        jSeparator24.setForeground(new java.awt.Color(41, 41, 141));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 17;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.05;
+        panelIspis.add(jSeparator24, gridBagConstraints);
+
+        jLabel44.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel44.setText("Podaci o uzorku");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        panelIspis.add(jLabel44, gridBagConstraints);
+
+        jLabel46.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        jLabel46.setText("Laboratorijski broj:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        panelIspis.add(jLabel46, gridBagConstraints);
+
+        lblLabBr.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 10;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.8;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 0);
+        panelIspis.add(lblLabBr, gridBagConstraints);
+
+        jLabel50.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        jLabel50.setText("Oznaka uzorka:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        panelIspis.add(jLabel50, gridBagConstraints);
+
+        lblOznakaU.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 11;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.8;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 0);
+        panelIspis.add(lblOznakaU, gridBagConstraints);
+
+        jLabel48.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        jLabel48.setText("Mjesto uzorkovanja:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        panelIspis.add(jLabel48, gridBagConstraints);
+
+        jLabel51.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        jLabel51.setText("Datum uzorkovanja:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        panelIspis.add(jLabel51, gridBagConstraints);
+
+        jLabel52.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        jLabel52.setText("Vrijeme uzorkovanja:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        panelIspis.add(jLabel52, gridBagConstraints);
+
+        jLabel53.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        jLabel53.setText("Početak analize:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        panelIspis.add(jLabel53, gridBagConstraints);
+
+        lblMjUz.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.8;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 0);
+        panelIspis.add(lblMjUz, gridBagConstraints);
+
+        lblDatumUz.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 13;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.8;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 0);
+        panelIspis.add(lblDatumUz, gridBagConstraints);
+
+        lblVrijemeUz.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 14;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.8;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 0);
+        panelIspis.add(lblVrijemeUz, gridBagConstraints);
+
+        lblPocAna.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 15;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.8;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 0);
+        panelIspis.add(lblPocAna, gridBagConstraints);
+
+        jLabel54.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        jLabel54.setText("Završetak analize:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 16;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        panelIspis.add(jLabel54, gridBagConstraints);
+
+        lblZavAna.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 16;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.8;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 2, 0, 0);
+        panelIspis.add(lblZavAna, gridBagConstraints);
+
+        jLabel55.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel55.setText("Rezultati analize");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 18;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+        panelIspis.add(jLabel55, gridBagConstraints);
+
+        jSeparator27.setForeground(new java.awt.Color(41, 41, 141));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 19;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        panelIspis.add(jSeparator27, gridBagConstraints);
+
+        tblRezIzvj.setFont(new java.awt.Font("Segoe UI", 1, 11)); // NOI18N
+        tblRezIzvj.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Sifra parametra", "Naziv parametra", "MDK", "Mjerna jedinica", "Rezultat"
+            }
+        ));
+        tblRezIzvj.setGridColor(new java.awt.Color(41, 41, 141));
+        tblRezIzvj.setSelectionBackground(new java.awt.Color(0, 191, 255));
+        jScrollPane1.setViewportView(tblRezIzvj);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 20;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 2.0;
+        panelIspis.add(jScrollPane1, gridBagConstraints);
+
+        jSeparator28.setForeground(new java.awt.Color(41, 41, 141));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 21;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.1;
+        panelIspis.add(jSeparator28, gridBagConstraints);
+
+        jSeparator29.setForeground(new java.awt.Color(41, 41, 141));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridwidth = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        panelIspis.add(jSeparator29, gridBagConstraints);
+
+        lblBrojUz.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridwidth = 3;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.weighty = 0.05;
+        gridBagConstraints.insets = new java.awt.Insets(0, 80, 0, 0);
+        panelIspis.add(lblBrojUz, gridBagConstraints);
+
+        panelIzvjestaj.add(panelIspis, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 10, 468, 660));
+
+        jPanelVoditelj.add(panelIzvjestaj, new org.netbeans.lib.awtextra.AbsoluteConstraints(1, 0, 1010, 690));
+
+        jLayeredPane1.add(jPanelVoditelj, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1020, 690));
+
+        getContentPane().add(jLayeredPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 260, 1020, 690));
+
+        setSize(new java.awt.Dimension(1256, 953));
+        setLocationRelativeTo(null);
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+
+    }//GEN-LAST:event_formWindowOpened
+
+    private void btnPrijavaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrijavaActionPerformed
+        String user = txtIme.getText();
+        String pass = txtPass.getText();
+        String vrstaKorisnika = String.valueOf(cmbVrstaKorisnika.getSelectedItem());
+        autentikacija autentikacija = new autentikacija(user, pass, vrstaKorisnika);
+
+        Connection conn = null;
+        PreparedStatement stmt;
+        conn = Konekcija.konekcija();
+        try {
+
+            stmt = conn.prepareStatement("SELECT * FROM `autentikacija` WHERE korisnicko_ime=? AND lozinka=? AND vrstaKorisnika=?");
+            stmt.setString(1, autentikacija.getKorisnickoIme());
+            stmt.setString(2, String.valueOf(autentikacija.getLozinka()));
+            stmt.setString(3, autentikacija.getVrstaKorisnika());
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+
+                if (cmbVrstaKorisnika.getSelectedIndex() == 0) {
+
+                    jPanelVoditelj.setVisible(true);
+                    voditeljBocniPanel.setVisible(true);
+                    // jPanelDjelatnik.setVisible(false);
+                    panelNoviDjelatnik.setVisible(false);
+                    panelNoviKlijent.setVisible(false);
+                    panelParametar.setVisible(false);
+                    panelUzorak.setVisible(false);
+                    panelUnosRezultata.setVisible(false);
+                    panelIzvjestaj.setVisible(false);
+
+                } else if (cmbVrstaKorisnika.getSelectedIndex() == 1) {
+                    jPanelVoditelj.setVisible(true);
+                    // jPanelDjelatnik.setVisible(true);
+                    voditeljBocniPanel.setVisible(true);
+                    btnVoditeljNoviDjelatnik.setVisible(false);
+                    lblBtnDjelatnik.setVisible(false);
+
+                    panelNoviDjelatnik.setVisible(false);
+                    panelNoviKlijent.setVisible(false);
+                    panelParametar.setVisible(false);
+                    panelUzorak.setVisible(false);
+                    panelUnosRezultata.setVisible(false);
+                    panelIzvjestaj.setVisible(false);
+
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Korisničko ime i lozinka nisu ispravni");
+                jPanelVoditelj.setVisible(false);
+                //panelIzvjestaj.setVisible(false);
+                voditeljBocniPanel.setVisible(false);
+            }
+
+            System.out.println("podaci poslani");
+            conn.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DBaseControll.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        prikaziBrojU();
+        prikaziDjelatnika();
+        prikaziKlijenta();
+        prikaziParametar();
+        prikaziParametarUzorak();
+
+        txtIme.setText("");
+        txtPass.setText("");
+
+    }//GEN-LAST:event_btnPrijavaActionPerformed
+
+    private void txtPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPassActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPassActionPerformed
+
+    private void btnSpremiDjelatnikaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSpremiDjelatnikaActionPerformed
+        String naziv = txtNazivDjelatnika.getText();
+        long OIB = Long.parseLong(txtOIBDjelatnika.getText());
+        djelatnik Djelatnik = new djelatnik(naziv, OIB);
+
+        spremiDjelatnikaUBazu(Djelatnik);
+        txtNazivDjelatnika.setText("");
+        txtOIBDjelatnika.setText("");
+        prikaziDjelatnika();
+
+
+    }//GEN-LAST:event_btnSpremiDjelatnikaActionPerformed
+
+    private void btnObrisiDjelatnikaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnObrisiDjelatnikaActionPerformed
+        DefaultTableModel tableModel = (DefaultTableModel) tblDjelatnik.getModel();
+
+        System.out.print("1");
+        int sifra = (int) tableModel.getValueAt(tblDjelatnik.getSelectedRow(), 0);
+        djelatnik Djelatnik = new djelatnik();
+        Djelatnik.setSifraD(sifra);
+        izbrisiDjelatnikaUBazi(Djelatnik);
+        prikaziDjelatnika();
+
+    }//GEN-LAST:event_btnObrisiDjelatnikaActionPerformed
+
+    private void btnIzmjeniDjelatnikaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIzmjeniDjelatnikaActionPerformed
+
+        DefaultTableModel tableModel = (DefaultTableModel) tblDjelatnik.getModel();
+
+        int sifra = (int) tableModel.getValueAt(tblDjelatnik.getSelectedRow(), 0);
+        String naziv = (String) tableModel.getValueAt(tblDjelatnik.getSelectedRow(), 1);
+        System.out.print(naziv + "  ");
+        String OIB = (String) tableModel.getValueAt(tblDjelatnik.getSelectedRow(), 2).toString();
+        System.out.print(OIB);
+
+        djelatnik Djelatnik = new djelatnik();
+        Djelatnik.setSifraD(sifra);
+
+        Djelatnik.setNaziv(naziv);
+
+        Djelatnik.setOIB(Long.valueOf(OIB));
+        izmjeniDjelatnikaUBazi(Djelatnik);
+
+        prikaziDjelatnika();
+
+    }//GEN-LAST:event_btnIzmjeniDjelatnikaActionPerformed
+
+    private void btnVoditeljNoviDjelatnikMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVoditeljNoviDjelatnikMousePressed
+
+        panelNoviDjelatnik.setVisible(true);
+        panelNoviKlijent.setVisible(false);
+        panelParametar.setVisible(false);
+        panelUzorak.setVisible(false);
+        panelUnosRezultata.setVisible(false);
+
+
+    }//GEN-LAST:event_btnVoditeljNoviDjelatnikMousePressed
+
+    private void btnDodajKlijentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDodajKlijentaActionPerformed
+
+        DefaultTableModel tableModel = (DefaultTableModel) tblKlijent.getModel();
+        Klijent klijent = new Klijent();
+        tableModel.addRow(new Object[]{klijent.getSifraK(), klijent.getNaziv(), klijent.getAdresa(), klijent.getpBroj(), klijent.getGrad(), klijent.getOIBK()});
+
+// TODO add your handling code here:
+    }//GEN-LAST:event_btnDodajKlijentaActionPerformed
+
+    private void btnSpremiKlijentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSpremiKlijentaActionPerformed
+        DefaultTableModel tableModel = (DefaultTableModel) tblKlijent.getModel();
+
+        String naziv = (String) tableModel.getValueAt(tblKlijent.getSelectedRow(), 1);
+        System.out.print("1");
+        String adresa = (String) tableModel.getValueAt(tblKlijent.getSelectedRow(), 2);
+        System.out.print("2");
+        int pBroj = (int) tableModel.getValueAt(tblKlijent.getSelectedRow(), 3);
+        System.out.print("3");
+        String grad = (String) tableModel.getValueAt(tblKlijent.getSelectedRow(), 4);
+        System.out.print("4");
+
+        String OIB = (String) tableModel.getValueAt(tblKlijent.getSelectedRow(), 5).toString();
+
+        System.out.print("5");
+
+        Klijent klijent = new Klijent();
+        klijent.setNaziv(naziv);
+        klijent.setAdresa(adresa);
+        klijent.setpBroj(pBroj);
+        klijent.setGrad(grad);
+
+        klijent.setOIBK(Long.valueOf("6"));
+
+        System.out.print(OIB);
+        spremiKlijentaUBazu(klijent);
+
+        System.out.print("7");
+        prikaziKlijenta();
+        //sve radi!!
+
+// TODO add your handling code here:
+    }//GEN-LAST:event_btnSpremiKlijentaActionPerformed
+
+    private void btnIzmjeniKlijentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIzmjeniKlijentaActionPerformed
+        DefaultTableModel tableModel = (DefaultTableModel) tblKlijent.getModel();
+        int sifra = (int) tableModel.getValueAt(tblKlijent.getSelectedRow(), 0);
+        String naziv = (String) tableModel.getValueAt(tblKlijent.getSelectedRow(), 1);
+        String adresa = (String) tableModel.getValueAt(tblKlijent.getSelectedRow(), 2);
+        int pBroj = (int) tableModel.getValueAt(tblKlijent.getSelectedRow(), 3);
+        String grad = (String) tableModel.getValueAt(tblKlijent.getSelectedRow(), 4);
+        String OIB = (String) tableModel.getValueAt(tblKlijent.getSelectedRow(), 5).toString();
+
+        Klijent klijent = new Klijent();
+        klijent.setSifraK(sifra);
+        klijent.setNaziv(naziv);
+        klijent.setAdresa(adresa);
+        klijent.setpBroj(pBroj);
+        klijent.setGrad(grad);
+        klijent.setOIBK(Long.valueOf(OIB));
+        izmjeniKlijentaUBazi(klijent);
+        prikaziKlijenta();
+    }//GEN-LAST:event_btnIzmjeniKlijentaActionPerformed
+
+    private void btnVoditeljNoviKlijentMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVoditeljNoviKlijentMousePressed
+        panelNoviKlijent.setVisible(true);
+        panelNoviDjelatnik.setVisible(false);
+        panelParametar.setVisible(false);
+        panelUzorak.setVisible(false);
+        panelUnosRezultata.setVisible(false);
+
+        sepNDjel.setBackground(Color.LIGHT_GRAY);
+        sepNDjel.setComponentZOrder(this, WIDTH);
+// TODO adpanelUnosRezultata.setVisible(false);d your handling code here:
+    }//GEN-LAST:event_btnVoditeljNoviKlijentMousePressed
+
+    private void txtPretraziKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPretraziKeyReleased
+        String query = txtPretrazi.getText().toLowerCase();
+        filter(query);
+
+    }//GEN-LAST:event_txtPretraziKeyReleased
+
+    private void cmbPretraziActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbPretraziActionPerformed
+
+// TODO add your handling code here:
+    }//GEN-LAST:event_cmbPretraziActionPerformed
+
+    private void btnNoviParametarMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnNoviParametarMousePressed
+        panelNoviKlijent.setVisible(false);
+        panelNoviDjelatnik.setVisible(false);
+        panelUnosRezultata.setVisible(false);
+
+        panelUzorak.setVisible(false);
+        panelParametar.setVisible(true);
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnNoviParametarMousePressed
+
+    private void btnDodajParametarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDodajParametarActionPerformed
+
+        DefaultTableModel tableModel = (DefaultTableModel) tblParametar.getModel();
+        Parametar parametar = new Parametar();
+        tableModel.addRow(new Object[]{parametar.getSifraP(), parametar.getNazivP(), parametar.getMjernaJ(), parametar.getMdk()});
+
+// TODO add your handling code here:
+    }//GEN-LAST:event_btnDodajParametarActionPerformed
+
+    private void btnSpremiParametarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSpremiParametarActionPerformed
+
+        DefaultTableModel tableModel = (DefaultTableModel) tblParametar.getModel();
+
+        String naziv = (String) tableModel.getValueAt(tblParametar.getSelectedRow(), 1);
+        String mjernaJ = (String) tableModel.getValueAt(tblParametar.getSelectedRow(), 2);
+        String mdk = (String) tableModel.getValueAt(tblParametar.getSelectedRow(), 3);
+        Parametar parametar = new Parametar();
+        parametar.setNazivP(naziv);
+        parametar.setMjernaJ(mjernaJ);
+        parametar.setMdk(mdk);
+        spremiParametarUBazu(parametar);
+        prikaziParametar();
+    }//GEN-LAST:event_btnSpremiParametarActionPerformed
+
+    private void btnIzmjeniParametarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIzmjeniParametarActionPerformed
+
+        DefaultTableModel tableModel = (DefaultTableModel) tblParametar.getModel();
+
+        int sifra = (int) tableModel.getValueAt(tblParametar.getSelectedRow(), 0);
+        String naziv = (String) tableModel.getValueAt(tblParametar.getSelectedRow(), 1);
+        String mjernaJ = (String) tableModel.getValueAt(tblParametar.getSelectedRow(), 2);
+        String mdk = (String) tableModel.getValueAt(tblParametar.getSelectedRow(), 3);
+        Parametar parametar = new Parametar();
+        parametar.setSifraP(sifra);
+        parametar.setNazivP(naziv);
+        parametar.setMjernaJ(mjernaJ);
+        parametar.setMdk(mdk);
+        izmjeniParametarUBazi(parametar);
+        prikaziParametar();
+
+
+    }//GEN-LAST:event_btnIzmjeniParametarActionPerformed
+
+    private void txtPretraziPKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPretraziPKeyReleased
+        String query = txtPretraziP.getText().toLowerCase();
+        filterP(query);// TODO add your handling code here:
+    }//GEN-LAST:event_txtPretraziPKeyReleased
+
+    private void cmbPretraziPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbPretraziPActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbPretraziPActionPerformed
+
+    private void btnVoditeljNoviUzorakMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVoditeljNoviUzorakMousePressed
+        panelNoviDjelatnik.setVisible(false);
+        panelNoviKlijent.setVisible(false);
+        panelParametar.setVisible(false);
+        panelUzorak.setVisible(true);
+        panelUnosRezultata.setVisible(false);
+        for (int i = 0; i < tblKlijent.getRowCount(); i++) {
+            cmbOdabirKlijenta.addItem(String.valueOf(tblKlijent.getValueAt(i, 0)));
+        }
+
+        for (int i = 0; i < tblDjelatnik.getRowCount(); i++) {
+            cmbOdabirDjelatnika.addItem(String.valueOf(tblDjelatnik.getValueAt(i, 0)));
+        }
+    }//GEN-LAST:event_btnVoditeljNoviUzorakMousePressed
+
+    private void cmbOdabirKlijentaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbOdabirKlijentaItemStateChanged
+
+        int odabir = Integer.parseInt(cmbOdabirKlijenta.getSelectedItem().toString());
+        lblNazivK.setText(String.valueOf(tblKlijent.getValueAt(odabir - 1, 1)));
+
+    }//GEN-LAST:event_cmbOdabirKlijentaItemStateChanged
+
+
+    private void cmbOdabirKlijentaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cmbOdabirKlijentaMousePressed
+
+//NE TREBA - PRAZNO//
+// TODO add your handling code here:
+    }//GEN-LAST:event_cmbOdabirKlijentaMousePressed
+
+    private void cmbOdabirDjelatnikaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbOdabirDjelatnikaItemStateChanged
+
+        int odabir = Integer.parseInt(cmbOdabirDjelatnika.getSelectedItem().toString());
+        lblNazivD.setText(String.valueOf(tblDjelatnik.getValueAt(odabir - 1, 1)));
+
+    }//GEN-LAST:event_cmbOdabirDjelatnikaItemStateChanged
+
+    private void btnSpremiUzorakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSpremiUzorakActionPerformed
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdt = new SimpleDateFormat("HH:mm:ss");
+
+        String nazivU = txtNazivUz.getText();
+        String mjestoU = txtMuzork.getText();
+        Date datumU = java.sql.Date.valueOf(sdf.format(jDateChooserDatumUZ.getDate()));
+        Time vrijemeU = Time.valueOf(sdt.format(odabirVremena.getValue()));
+        Date pocetakA = java.sql.Date.valueOf(sdf.format(jDateChooserPocetakA.getDate()));
+        Date zavrsetakA = java.sql.Date.valueOf(sdf.format(jDateChooserZavrsetakA.getDate()));
+        int sifraK = Integer.parseInt(cmbOdabirKlijenta.getSelectedItem().toString());
+        int sifraD = Integer.parseInt(cmbOdabirDjelatnika.getSelectedItem().toString());
+        Uzorak uzorak = new Uzorak(nazivU, datumU, mjestoU, sifraD, sifraK, pocetakA, zavrsetakA, vrijemeU);
+
+        spremiUzorakUBazu(uzorak);
+
+        DefaultTableModel tableModel = (DefaultTableModel) tblOdabirParametra.getModel();
+        //radi kako treba napokon//
+        for (int i = 0; i < tblOdabirParametra.getRowCount(); i++) {
+            Boolean checked = Boolean.valueOf(tblOdabirParametra.getValueAt(i, 2).toString());
+
+            if (checked) {
+                int sifraP = (int) tableModel.getValueAt(i, 0);
+                int sifraU = Integer.parseInt(lblSifraUz.getText());
+                Rezultat rezultat = new Rezultat();
+                rezultat.setSifraP(sifraP);
+                rezultat.setSifraU(sifraU);
+                spremiRezultatUBazu(rezultat);
+            }
+        }
+    }//GEN-LAST:event_btnSpremiUzorakActionPerformed
+
+    private void btnNoviiUzorakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNoviiUzorakActionPerformed
+        txtNazivUz.setText("");
+        txtMuzork.setText("");
+        jDateChooserDatumUZ.setDate(new Date());
+        jDateChooserPocetakA.setDate(new Date());
+        jDateChooserZavrsetakA.setDate(new Date());
+        DefaultTableModel tableModel = (DefaultTableModel) tblOdabirParametra.getModel();
+        for (int i = 0; i < tblOdabirParametra.getRowCount(); i++) {
+            tableModel.setValueAt(false, i, 2);
+        }
+
+        prikaziBrojU();
+
+    }//GEN-LAST:event_btnNoviiUzorakActionPerformed
+
+    private void btnSpremiRezultatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSpremiRezultatActionPerformed
+        DefaultTableModel tableModel = (DefaultTableModel) tblUnosRez.getModel();
+        int odabir = Integer.parseInt(cmbOdabirUz.getSelectedItem().toString());
+        for (int i = 0; i < tblUnosRez.getRowCount(); i++) {
+            String rez = (String) tableModel.getValueAt(i, 4);
+
+            int param = (int) tableModel.getValueAt(i, 0);
+            Rezultat rezultat = new Rezultat();
+            rezultat.setVrijdnostR(rez);
+            rezultat.setSifraU(odabir);
+            rezultat.setSifraP(param);
+            System.out.println("spremi   " + odabir + "   " + rez + "   " + param);
+            spremiVrijednostRezultatUBazu(rezultat);
+
+        }
+
+
+    }//GEN-LAST:event_btnSpremiRezultatActionPerformed
+
+    private void btnIzmjeniRezActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIzmjeniRezActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnIzmjeniRezActionPerformed
+
+    private void btnVoditeljUnosRezMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVoditeljUnosRezMousePressed
+        panelNoviDjelatnik.setVisible(false);
+        panelNoviKlijent.setVisible(false);
+        panelParametar.setVisible(false);
+        panelUzorak.setVisible(false);
+        panelUnosRezultata.setVisible(true);
+
+        try {
+            ArrayList<Uzorak> listaUzoraka = DBaseControll.ucitajSveUzorke();
+
+            for (Uzorak uzorak : listaUzoraka) {
+                cmbOdabirUz.addItem(String.valueOf(uzorak.getSifraU()));
+
+            }
+
+        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+            Logger.getLogger(glavniProzor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnVoditeljUnosRezMousePressed
+
+    private void cmbOdabirUzItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbOdabirUzItemStateChanged
+
+    }//GEN-LAST:event_cmbOdabirUzItemStateChanged
+
+    private void cmbOdabirUzActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbOdabirUzActionPerformed
+
+        try {
+
+            System.out.println("ucitavanje tablice");
+            ucitajOdabraneParametre();
+            prikaziOdabraneParam();
+
+        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+            Logger.getLogger(glavniProzor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_cmbOdabirUzActionPerformed
+
+    private void txtOIBDjelatnikaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtOIBDjelatnikaKeyTyped
+        if (txtOIBDjelatnika.getText().length() >= 11) {
+            evt.consume();
+        }
+
+// TODO add your handling code here:
+    }//GEN-LAST:event_txtOIBDjelatnikaKeyTyped
+
+    private void btnVoditeljUnosRezFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_btnVoditeljUnosRezFocusLost
+
+// TODO add your handling code here:
+    }//GEN-LAST:event_btnVoditeljUnosRezFocusLost
+
+    private void cmbOdabirUzComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_cmbOdabirUzComponentHidden
+
+
+    }//GEN-LAST:event_cmbOdabirUzComponentHidden
+
+    private void panelUnosRezultataComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_panelUnosRezultataComponentHidden
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_panelUnosRezultataComponentHidden
+
+    private void btnVoditeljIzvjesceMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVoditeljIzvjesceMouseClicked
+        // TODO add your handling code here:
+        panelNoviDjelatnik.setVisible(false);
+        panelNoviKlijent.setVisible(false);
+        panelParametar.setVisible(false);
+        panelUzorak.setVisible(false);
+        panelUnosRezultata.setVisible(false);
+        panelIzvjestaj.setVisible(true);
+
+        try {
+            ArrayList<Uzorak> listaUzoraka1 = DBaseControll.ucitajSveUzorke();
+
+            for (Uzorak uzoraK : listaUzoraka1) {
+
+                cmbOdabirUzIzvjestaj.addItem(String.valueOf(uzoraK.getSifraU()));//odabir uzorka na izvješću
+                
+            }
+
+        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+            Logger.getLogger(glavniProzor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
+    }//GEN-LAST:event_btnVoditeljIzvjesceMouseClicked
+
+    private void cmbOdabirUzIzvjestajActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbOdabirUzIzvjestajActionPerformed
+        try {
+            // biranje izvješća
+            DefaultTableModel tableModel = (DefaultTableModel) tblRezIzvj.getModel();
+            tblRezIzvj.getColumnModel().getColumn(0).setPreferredWidth(100);
+            tblRezIzvj.getColumnModel().getColumn(1).setPreferredWidth(100);
+            tblRezIzvj.getColumnModel().getColumn(2).setPreferredWidth(20);
+            tblRezIzvj.getColumnModel().getColumn(3).setPreferredWidth(100);
+            tblRezIzvj.getColumnModel().getColumn(4).setPreferredWidth(50);
+            
+            DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
+            rightRenderer.setHorizontalAlignment(JLabel.CENTER);
+            tblRezIzvj.getColumnModel().getColumn(0).setCellRenderer(rightRenderer);
+            tblRezIzvj.getColumnModel().getColumn(2).setCellRenderer(rightRenderer);
+            tblRezIzvj.getColumnModel().getColumn(4).setCellRenderer(rightRenderer);
+
+            tableModel.setRowCount(0);
+
+            ArrayList<Izvjesce> listaSvega = ucitajIzvjesce();
+            for (int i = 0; i < listaSvega.size(); i++) {
+                lblSifraD.setText(listaSvega.get(i).getIdDjelatnika());
+                lblImeD.setText(listaSvega.get(i).getNazivD());
+                lblNazivKIzvjesce.setText(listaSvega.get(i).getNazivK());
+                lblGrad.setText(listaSvega.get(i).getGrad());
+                lblNazivK.setText(listaSvega.get(i).getNazivK());
+                lblOIB.setText(listaSvega.get(i).getOIB());
+                lblPBroj.setText(listaSvega.get(i).getpBroj());
+                lblSifraK.setText(listaSvega.get(i).getIdKlijenta());
+                lblAdresaK.setText(listaSvega.get(i).getAdresaK());
+                lblLabBr.setText(listaSvega.get(i).getIdUz());
+                lblOznakaU.setText(listaSvega.get(i).getNazivU());
+                lblMjUz.setText(listaSvega.get(i).getMjestoU());
+                lblDatumUz.setText(listaSvega.get(i).getDatumU());
+                lblVrijemeUz.setText(listaSvega.get(i).getVrijemeU());
+                lblPocAna.setText(listaSvega.get(i).getPocetakA());
+                lblZavAna.setText(listaSvega.get(i).getZavrsetakA());
+                lblBrojUz.setText(listaSvega.get(i).getIdUz());
+
+                String sifraP = listaSvega.get(i).getIdParam();
+                String nazivP = listaSvega.get(i).getNazivP();
+                String MjJ = listaSvega.get(i).getMjJed();
+                String MDK = listaSvega.get(i).getMdk();
+                String vrijednost = listaSvega.get(i).getRezultat();
+
+                Object[] podaci = {sifraP, nazivP, MDK, MjJ, vrijednost};
+                tableModel.addRow(podaci);
+
+            }
+
+        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+            Logger.getLogger(glavniProzor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_cmbOdabirUzIzvjestajActionPerformed
+
+    private void btnIspisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIspisActionPerformed
+        // TODO add your handling code here:
+        
+        PrinterJob ispis =PrinterJob.getPrinterJob();
+        ispis.setJobName("Ispis izvještaja");
+        
+        ispis.setPrintable(new Printable(){
+        public int print(Graphics pg,PageFormat pf, int pageNum){
+                    pf.setOrientation(PageFormat.PORTRAIT);
+                    
+                    Paper papir =pf.getPaper();
+                    papir.setSize(595, 842);
+                    papir.setImageableArea(17, 15, papir.getHeight(), papir.getWidth());
+                    pf.setPaper(papir);
+                    
+                 if(pageNum>0){
+                    return Printable.NO_SUCH_PAGE;
+                }
+
+                Graphics2D g2 = (Graphics2D)pg;
+                g2.translate(pf.getImageableX(), pf.getImageableY());                
+                g2.scale(1.20,1.20);
+                
+                
+
+                panelIspis.paint(g2);
+
+                return Printable.PAGE_EXISTS;
+            
+        }
+            
+        });
+        
+         boolean ok = ispis.printDialog();
+        if(ok){
+        try{
+
+        ispis.print();
+        }
+        catch (PrinterException ex){}
+        }
+        
+        
+        
+        
+    }//GEN-LAST:event_btnIspisActionPerformed
+
+    private void lblCloseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblCloseMouseClicked
+        // TODO add your handling code here:
+        
+      System.exit(0);
+      
+    }//GEN-LAST:event_lblCloseMouseClicked
+
+    private void lblMiniMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblMiniMouseClicked
+        // TODO add your handling code here:
+        
+        this.setState(this.ICONIFIED);
+    }//GEN-LAST:event_lblMiniMouseClicked
+
+    private void panelDragMouseMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelDragMouseMouseDragged
+        // TODO add your handling code here:
+        int x = evt.getXOnScreen();
+        int y = evt.getYOnScreen();
+        
+        this.setLocation(x - xMouse, y-yMouse);
+    }//GEN-LAST:event_panelDragMouseMouseDragged
+
+    private void panelDragMouseMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelDragMouseMousePressed
+        // TODO add your handling code here:
+        
+        xMouse=evt.getX();
+        yMouse=evt.getY();
+    }//GEN-LAST:event_panelDragMouseMousePressed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+
+
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+
+                }
+            }
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(glavniProzor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        /* Create and display the form */
+        FlatLightLaf.install();
+
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new glavniProzor().setVisible(true);
+                
+            }
+        });
+
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDodajKlijenta;
+    private javax.swing.JButton btnDodajParametar;
+    private javax.swing.JButton btnIspis;
+    private javax.swing.JButton btnIzmjeniDjelatnika;
+    private javax.swing.JButton btnIzmjeniKlijenta;
+    private javax.swing.JButton btnIzmjeniParametar;
+    private javax.swing.JButton btnIzmjeniRez;
+    private javax.swing.JPanel btnNoviParametar;
+    private javax.swing.JButton btnNoviiUzorak;
+    private javax.swing.JButton btnObrisiDjelatnika;
+    private javax.swing.JButton btnPrijava;
+    private javax.swing.JButton btnSpremiDjelatnika;
+    private javax.swing.JButton btnSpremiKlijenta;
+    private javax.swing.JButton btnSpremiParametar;
+    private javax.swing.JButton btnSpremiRezultat;
+    private javax.swing.JButton btnSpremiUzorak;
+    private javax.swing.JPanel btnVoditeljIzvjesce;
+    private javax.swing.JPanel btnVoditeljNoviDjelatnik;
+    private javax.swing.JPanel btnVoditeljNoviKlijent;
+    private javax.swing.JPanel btnVoditeljNoviUzorak;
+    private javax.swing.JPanel btnVoditeljUnosRez;
+    private javax.swing.JComboBox<String> cmbOdabirDjelatnika;
+    private javax.swing.JComboBox<String> cmbOdabirKlijenta;
+    private javax.swing.JComboBox<String> cmbOdabirUz;
+    private javax.swing.JComboBox<String> cmbOdabirUzIzvjestaj;
+    private javax.swing.JComboBox<String> cmbPretrazi;
+    private javax.swing.JComboBox<String> cmbPretraziP;
+    private javax.swing.JComboBox<String> cmbVrstaKorisnika;
+    private com.formdev.flatlaf.ui.FlatButtonUI flatButtonUI1;
+    private com.formdev.flatlaf.ui.FlatButtonUI flatButtonUI2;
+    private javax.swing.JButton jButton1;
+    private com.toedter.calendar.JDateChooser jDateChooserDatumUZ;
+    private com.toedter.calendar.JDateChooser jDateChooserPocetakA;
+    private com.toedter.calendar.JDateChooser jDateChooserZavrsetakA;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
+    private javax.swing.JLabel jLabel33;
+    private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel35;
+    private javax.swing.JLabel jLabel36;
+    private javax.swing.JLabel jLabel37;
+    private javax.swing.JLabel jLabel38;
+    private javax.swing.JLabel jLabel39;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel40;
+    private javax.swing.JLabel jLabel41;
+    private javax.swing.JLabel jLabel42;
+    private javax.swing.JLabel jLabel43;
+    private javax.swing.JLabel jLabel44;
+    private javax.swing.JLabel jLabel45;
+    private javax.swing.JLabel jLabel46;
+    private javax.swing.JLabel jLabel47;
+    private javax.swing.JLabel jLabel48;
+    private javax.swing.JLabel jLabel49;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel50;
+    private javax.swing.JLabel jLabel51;
+    private javax.swing.JLabel jLabel52;
+    private javax.swing.JLabel jLabel53;
+    private javax.swing.JLabel jLabel54;
+    private javax.swing.JLabel jLabel55;
+    private javax.swing.JLabel jLabel56;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JLayeredPane jLayeredPane1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanelVoditelj;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator10;
+    private javax.swing.JSeparator jSeparator11;
+    private javax.swing.JSeparator jSeparator12;
+    private javax.swing.JSeparator jSeparator13;
+    private javax.swing.JSeparator jSeparator14;
+    private javax.swing.JSeparator jSeparator15;
+    private javax.swing.JSeparator jSeparator16;
+    private javax.swing.JSeparator jSeparator17;
+    private javax.swing.JSeparator jSeparator18;
+    private javax.swing.JSeparator jSeparator19;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator20;
+    private javax.swing.JSeparator jSeparator21;
+    private javax.swing.JSeparator jSeparator22;
+    private javax.swing.JSeparator jSeparator23;
+    private javax.swing.JSeparator jSeparator24;
+    private javax.swing.JSeparator jSeparator25;
+    private javax.swing.JSeparator jSeparator26;
+    private javax.swing.JSeparator jSeparator27;
+    private javax.swing.JSeparator jSeparator28;
+    private javax.swing.JSeparator jSeparator29;
+    private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JSeparator jSeparator5;
+    private javax.swing.JSeparator jSeparator6;
+    private javax.swing.JSeparator jSeparator7;
+    private javax.swing.JSeparator jSeparator8;
+    private javax.swing.JSeparator jSeparator9;
+    private javax.swing.JLabel lblAdresaK;
+    private javax.swing.JLabel lblBrojUz;
+    private javax.swing.JLabel lblBtnDjelatnik;
+    private javax.swing.JLabel lblClose;
+    private javax.swing.JLabel lblDatumUz;
+    private javax.swing.JLabel lblGrad;
+    private javax.swing.JLabel lblImeD;
+    private javax.swing.JLabel lblLabBr;
+    private javax.swing.JLabel lblMini;
+    private javax.swing.JLabel lblMjUz;
+    private javax.swing.JLabel lblNazivD;
+    private javax.swing.JLabel lblNazivK;
+    private javax.swing.JLabel lblNazivKIzvjesce;
+    private javax.swing.JLabel lblOIB;
+    private javax.swing.JLabel lblOznakaU;
+    private javax.swing.JLabel lblPBroj;
+    private javax.swing.JLabel lblPocAna;
+    private javax.swing.JLabel lblSifraD;
+    private javax.swing.JLabel lblSifraK;
+    private javax.swing.JLabel lblSifraUz;
+    private javax.swing.JLabel lblUnosRz;
+    private javax.swing.JLabel lblVrijemeUz;
+    private javax.swing.JLabel lblZavAna;
+    private javax.swing.JSpinner odabirVremena;
+    private javax.swing.JPanel panelDragMouse;
+    private javax.swing.JPanel panelIspis;
+    private javax.swing.JPanel panelIzvjestaj;
+    private javax.swing.JPanel panelNoviDjelatnik;
+    private javax.swing.JPanel panelNoviKlijent;
+    private javax.swing.JPanel panelParametar;
+    private javax.swing.JPanel panelTopPrijava;
+    private javax.swing.JPanel panelUnosRezultata;
+    private javax.swing.JPanel panelUzorak;
+    private javax.swing.JSeparator sepNDjel;
+    private javax.swing.JTable tblDjelatnik;
+    private javax.swing.JTable tblKlijent;
+    private javax.swing.JTable tblOdabirParametra;
+    private javax.swing.JTable tblParametar;
+    private javax.swing.JTable tblRezIzvj;
+    private javax.swing.JTable tblUnosRez;
+    private javax.swing.JTextField txtIme;
+    private javax.swing.JTextField txtMuzork;
+    private javax.swing.JTextField txtNazivDjelatnika;
+    private javax.swing.JTextField txtNazivUz;
+    private javax.swing.JTextField txtOIBDjelatnika;
+    private javax.swing.JPasswordField txtPass;
+    private javax.swing.JTextField txtPretrazi;
+    private javax.swing.JTextField txtPretraziP;
+    private javax.swing.JPanel voditeljBocniPanel;
+    // End of variables declaration//GEN-END:variables
+
+    private void prikaziDjelatnika() {
+        DefaultTableModel tableModel = (DefaultTableModel) tblDjelatnik.getModel();
+        tableModel.setRowCount(0);
+
+        try {
+            ArrayList<djelatnik> listaDjelatnika = DBaseControll.ucitajDjelatnika();
+
+            for (djelatnik djelatnik : listaDjelatnika) {
+                System.out.println("Ispis greske" + listaDjelatnika.size());
+                System.out.println("Ispis greske" + djelatnik.getNaziv());
+                tableModel.addRow(new Object[]{djelatnik.getSifraD(), djelatnik.getNaziv(), djelatnik.getOIB()});
+            }
+
+        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+            //Logger.getLogger(glavniProzor.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Ispis greske" + ex);
+        }
+
+    }
+
+    private void prikaziKlijenta() {
+        DefaultTableModel tableModel = (DefaultTableModel) tblKlijent.getModel();
+        tableModel.setRowCount(0);
+
+        try {
+            ArrayList<Klijent> listaKlijenata = DBaseControll.ucitajKlijenta();
+
+            for (Klijent klijent : listaKlijenata) {
+                tableModel.addRow(new Object[]{klijent.getSifraK(), klijent.getNaziv(), klijent.getAdresa(), klijent.getpBroj(), klijent.getGrad(), klijent.getOIBK()});
+            }
+
+        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+            Logger.getLogger(glavniProzor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    private void prikaziParametar() {
+        DefaultTableModel tableModel = (DefaultTableModel) tblParametar.getModel();
+
+        tableModel.setRowCount(0);
+
+        try {
+            ArrayList<Parametar> listaParametara = DBaseControll.ucitajParametar();
+
+            for (Parametar parametar : listaParametara) {
+                tableModel.addRow(new Object[]{parametar.getSifraP(), parametar.getNazivP(), parametar.getMjernaJ(), parametar.getMdk()});
+            }
+
+        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+            Logger.getLogger(glavniProzor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    private void prikaziParametarUzorak() {
+        DefaultTableModel tableModel = (DefaultTableModel) tblOdabirParametra.getModel();
+
+        tableModel.setRowCount(0);
+        Boolean checkbox = false;
+
+        try {
+            ArrayList<Parametar> listaParametara = DBaseControll.ucitajParametar();
+
+            for (Parametar parametar : listaParametara) {
+                tableModel.addRow(new Object[]{parametar.getSifraP(), parametar.getNazivP(), checkbox});
+
+            }
+
+        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+            Logger.getLogger(glavniProzor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void prikaziOdabraneParam() {
+        DefaultTableModel tableModel = (DefaultTableModel) tblUnosRez.getModel();
+
+        tableModel.setRowCount(0);
+        //String vrijednost="";
+
+        try {
+            ArrayList<Parametar> listaParametara1 = ucitajOdabraneParametre();
+            ArrayList<Rezultat> listaRezultata = ucitajSveRezultate();
+            for (int i = 0; i < listaParametara1.size(); i++) {
+                int sifraP = listaParametara1.get(i).getSifraP();
+                String nazivP = listaParametara1.get(i).getNazivP();
+                String MjJ = listaParametara1.get(i).getMjernaJ();
+                String MDK = listaParametara1.get(i).getMdk();
+                String vrijednost = listaRezultata.get(i).getVrijdnostR();
+
+                Object[] podaci = {sifraP, nazivP, MjJ, MDK, vrijednost};
+                tableModel.addRow(podaci);
+
+            }
+        } catch (SQLException | ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+            Logger.getLogger(glavniProzor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void prikaziBrojU() {
+        try {
+
+            Connection conn = null;
+            PreparedStatement stmt;
+            PreparedStatement stmt1;
+            conn = Konekcija.konekcija();
+
+            stmt = conn.prepareStatement("SELECT AUTO_INCREMENT\n"
+                    + "     FROM information_schema.TABLES\n"
+                    + "     WHERE TABLE_SCHEMA = \"laboratorij\"\n"
+                    + "     AND TABLE_NAME = \"uzorak\";");
+            stmt1 = conn.prepareStatement("Analyze table uzorak");
+
+            stmt1.executeQuery();
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+
+                int sifraU = rs.getInt(1);
+                lblSifraUz.setText(String.valueOf(sifraU));
+
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DBaseControll.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    private void filter(String query) {
+
+        TableRowSorter<TableModel> tr = new TableRowSorter<>(tblKlijent.getModel());
+        int odabir = cmbPretrazi.getSelectedIndex();
+        tblKlijent.setRowSorter(tr);
+        tr.setRowFilter(RowFilter.regexFilter("(?i)" + query, odabir));
+
+    }
+
+    private void filterP(String query) {
+
+        TableRowSorter<TableModel> tr = new TableRowSorter<>(tblParametar.getModel());
+        int odabirP = cmbPretraziP.getSelectedIndex();
+        tblParametar.setRowSorter(tr);
+        tr.setRowFilter(RowFilter.regexFilter("(?i)" + query, odabirP));
+
+    }
+
+    public ArrayList<Parametar> ucitajOdabraneParametre() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        ArrayList<Parametar> listaParametara1 = new ArrayList<Parametar>();
+        Connection conn = null;
+        PreparedStatement stmt;
+
+        conn = Konekcija.konekcija();
+
+        stmt = conn.prepareStatement("select rezultat.idUzorak, rezultat.idParam,parametar.nazivP,parametar.mjJed,parametar.mdk\n"
+                + "from (rezultat \n"
+                + "inner join parametar on rezultat.idParam=parametar.idParam)\n"
+                + "where rezultat.idUzorak=?;");
+        int odabir = Integer.parseInt(cmbOdabirUz.getSelectedItem().toString());
+        //int odabir2 =Integer.parseInt(cmbOdabirUz.getSelectedItem().toString()); 
+        System.out.println("konekcija odaP uspostavljena 15" + odabir);
+        stmt.setInt(1, odabir);
+
+        ResultSet rs = stmt.executeQuery();
+        System.out.println("konekcija odaP uspostavljena 2");
+        while (rs.next()) {
+
+            int sifra = rs.getInt("idParam");
+            String naziv = rs.getString("nazivP");
+            String mjernaJ = rs.getString("mjJed");
+            String mdk = rs.getString("mdk");
+
+            System.out.println("konekcija odaP uspostavljena 3");
+
+            Parametar parametar = new Parametar();
+
+            parametar.setSifraP(sifra);
+            parametar.setNazivP(naziv);
+            parametar.setMjernaJ(mjernaJ);
+            parametar.setMdk(mdk);
+
+            listaParametara1.add(parametar);
+            System.out.println("konekcija odaP uspostavljena 4" + mjernaJ);
+
+        }
+        return listaParametara1;
+
+    }
+
+    public ArrayList<Rezultat> ucitajSveRezultate() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        ArrayList<Rezultat> listaRezultata = new ArrayList<Rezultat>();
+
+        Connection conn = null;
+        PreparedStatement stmt;
+
+        conn = Konekcija.konekcija();
+        stmt = conn.prepareStatement("SELECT * FROM rezultat WHERE `idUzorak`=?;");
+        int odabir = Integer.parseInt(cmbOdabirUz.getSelectedItem().toString());
+        System.out.println("konekcija odaP uspostavljena 25" + odabir);
+        stmt.setInt(1, odabir);
+        ResultSet rs = stmt.executeQuery();
+
+        while (rs.next()) {
+
+            String vrijednost = rs.getString("vrijednostR");
+
+            Rezultat rezultat = new Rezultat();
+
+            rezultat.setVrijdnostR(vrijednost);
+
+            listaRezultata.add(rezultat);
+        }
+
+        return listaRezultata;
+
+    }
+
+    public ArrayList<Izvjesce> ucitajIzvjesce() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        ArrayList<Izvjesce> ucitajIzvjesce = new ArrayList<Izvjesce>();
+        Connection conn = null;
+        PreparedStatement stmt;
+
+        conn = Konekcija.konekcija();
+
+        stmt = conn.prepareStatement("select rezultat.idUzorak, rezultat.idParam,rezultat.vrijednostR,parametar.mjJed,parametar.mdk,parametar.nazivP,uzorak.nazivU,uzorak.mjestoU,uzorak.datumU,uzorak.vrijemeU,uzorak.pocetakA,uzorak.zavrsetakA,klijenti.nazivK,klijenti.idKlijenta,klijenti.adresaK,klijenti.grad,klijenti.pBroj,klijenti.OIB,djelatnik.idDjelatnika,djelatnik.nazivD\n"
+                + "from ((((rezultat \n"
+                + "inner join parametar on rezultat.idParam=parametar.idParam)\n"
+                + "inner join uzorak on rezultat.idUzorak=uzorak.idUzorka)\n"
+                + "inner join klijenti on klijenti.idKlijenta=uzorak.idklijenta)\n"
+                + "inner join djelatnik on djelatnik.idDjelatnika=uzorak.idDjelatnika)\n"
+                + "where rezultat.idUzorak=?;");
+
+        int odabir = Integer.parseInt(cmbOdabirUzIzvjestaj.getSelectedItem().toString());
+        System.out.println("konekcija odaP uspostavljena 1.5" + odabir);
+        stmt.setInt(1, odabir);
+
+        ResultSet rs = stmt.executeQuery();
+        System.out.println("konekcija odaP uspostavljena 2");
+        while (rs.next()) {
+
+            String idUz = (String.valueOf(rs.getInt("idUzorak")));
+            String idParam = (String.valueOf(rs.getInt("idParam")));
+            String rezultat = rs.getString("vrijednostR");
+            String mjJed = rs.getString("mjJed");
+            String mdk = rs.getString("mdk");
+            String nazivP = rs.getString("nazivP");
+            String nazivU = rs.getString("nazivU");
+            String mjestoU = rs.getString("mjestoU");
+            String datumU = (String.valueOf(rs.getDate("datumU")));
+            String vrijemeU = (String.valueOf(rs.getTime("vrijemeU")));
+            String pocetakA = (String.valueOf(rs.getDate("pocetakA")));
+            String zavrsetakA = (String.valueOf(rs.getDate("zavrsetakA")));
+            String nazivK = rs.getString("nazivK");
+            String idKlijenta = (String.valueOf(rs.getInt("idKlijenta")));
+            String adresaK = rs.getString("adresaK");
+            String grad = rs.getString("grad");
+            String pBroj = (String.valueOf(rs.getInt("pBroj")));
+            String OIB = (String.valueOf(rs.getLong("OIB")));
+            String idDjelatnika = (String.valueOf(rs.getInt("idDjelatnika")));
+            String nazivD = rs.getString("nazivD");
+
+            System.out.println("konekcija odaP uspostavljena 3" + adresaK);
+
+            Izvjesce izvjesce = new Izvjesce();
+
+            izvjesce.setIdUz(idUz);
+            izvjesce.setIdParam(idParam);
+            izvjesce.setRezultat(rezultat);
+            izvjesce.setMjJed(mjJed);
+            izvjesce.setMdk(mdk);
+            izvjesce.setNazivP(nazivP);
+            izvjesce.setNazivU(nazivU);
+            izvjesce.setMjestoU(mjestoU);
+            izvjesce.setDatumU(datumU);
+            izvjesce.setVrijemeU(vrijemeU);
+            izvjesce.setPocetakA(pocetakA);
+            izvjesce.setZavrsetakA(zavrsetakA);
+            izvjesce.setNazivK(nazivK);
+            izvjesce.setIdKlijenta(idKlijenta);
+            izvjesce.setAdresaK(adresaK);
+            izvjesce.setGrad(grad);
+            izvjesce.setpBroj(pBroj);
+            izvjesce.setOIB(OIB);
+            izvjesce.setIdDjelatnika(idDjelatnika);
+            izvjesce.setNazivD(nazivD);
+
+            ucitajIzvjesce.add(izvjesce);
+
+            System.out.println("konekcija odaP uspostavljena 4" + adresaK);
+
+        }
+        return ucitajIzvjesce;
+
+    }
+
+}
